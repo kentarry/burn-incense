@@ -1,0 +1,1328 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>虔誠燒香 — 線上拜拜工具</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      font-size: 16px
+    }
+
+    body {
+      font-family: 'Noto Serif TC', Georgia, serif;
+      background: linear-gradient(180deg, #0D0D1A, #1A1A2E 40%, #16213E);
+      color: #E8DCC8;
+      min-height: 100vh;
+      overflow-x: hidden
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #DAA520;
+      border-radius: 4px
+    }
+
+    button {
+      font-family: 'Noto Serif TC', sans-serif;
+      transition: all .18s ease;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden
+    }
+
+    button:hover {
+      filter: brightness(1.15)
+    }
+
+    button:active {
+      transform: scale(0.92);
+      filter: brightness(1.2)
+    }
+
+    .sel-btn {
+      padding: 16px 12px;
+      border-radius: 12px;
+      text-align: center;
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid rgba(255, 255, 255, .1);
+      transition: all .2s ease
+    }
+
+    .sel-btn:active {
+      transform: scale(0.92);
+      background: rgba(218, 165, 32, .15);
+      box-shadow: 0 0 20px rgba(218, 165, 32, .3)
+    }
+
+    .sel-btn.active {
+      background: rgba(218, 165, 32, .15);
+      border: 2px solid #DAA520;
+      box-shadow: 0 0 16px rgba(218, 165, 32, .25)
+    }
+
+    .sel-btn .label {
+      font-size: 15px;
+      color: #BBA86A;
+      font-weight: 600
+    }
+
+    .sel-btn.active .label {
+      color: #FFD700
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 0
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      border: 1px solid rgba(218, 165, 32, .25);
+      background: rgba(255, 255, 255, .03);
+      color: #8B7D6B;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all .2s ease
+    }
+
+    .tab-btn:active {
+      transform: scale(0.94);
+      background: rgba(218, 165, 32, .12);
+      box-shadow: 0 0 12px rgba(218, 165, 32, .2)
+    }
+
+    .tab-btn.active {
+      background: rgba(218, 165, 32, .2);
+      color: #FFD700;
+      box-shadow: 0 0 12px rgba(218, 165, 32, .18)
+    }
+
+    .tab-btn:first-child {
+      border-radius: 8px 0 0 8px
+    }
+
+    .tab-btn:last-child {
+      border-radius: 0 8px 8px 0
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px
+    }
+
+    .grid4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .center {
+      text-align: center
+    }
+
+    .container {
+      max-width: 960px;
+      width: 94%;
+      margin: 0 auto;
+      padding: 0 16px
+    }
+
+    .offering-table {
+      background: linear-gradient(180deg, #C0392B, #96281B);
+      border-radius: 4px 4px 0 0;
+      padding: 12px 12px 8px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
+      border: 1px solid #7A1010;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: flex-end
+    }
+
+    .table-leg {
+      width: 8px;
+      height: 18px;
+      background: #8B1A1A;
+      border-radius: 0 0 3px 3px
+    }
+
+    .start-btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 16px 0;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #8B6914, #DAA520, #B8860B);
+      color: #FFF;
+      box-shadow: 0 4px 18px rgba(218, 165, 32, .22);
+      transition: all .2s ease
+    }
+
+    .start-btn:hover {
+      box-shadow: 0 6px 24px rgba(218, 165, 32, .35);
+      transform: translateY(-1px)
+    }
+
+    .start-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 8px rgba(218, 165, 32, .18)
+    }
+
+    .scene-btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all .2s ease
+    }
+
+    .scene-btn:active {
+      transform: scale(0.94)
+    }
+
+    .deity-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #DAA520;
+      box-shadow: 0 0 12px rgba(218, 165, 32, .3)
+    }
+
+    .deity-img-lg {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #FFD700;
+      box-shadow: 0 0 20px rgba(218, 165, 32, .4)
+    }
+
+    /* Bowing animation */
+    @keyframes bowDown {
+      0% {
+        transform: rotate(0deg)
+      }
+
+      100% {
+        transform: rotate(-35deg)
+      }
+    }
+
+    @keyframes bowUp {
+      0% {
+        transform: rotate(-35deg)
+      }
+
+      100% {
+        transform: rotate(0deg)
+      }
+    }
+
+    .person-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 4px
+    }
+
+    .person-body {
+      transform-origin: bottom center;
+      animation: bowCycle 3s ease-in-out forwards
+    }
+
+    @keyframes bowCycle {
+      0% {
+        transform: rotate(0)
+      }
+
+      8% {
+        transform: rotate(-35deg)
+      }
+
+      16% {
+        transform: rotate(0)
+      }
+
+      25% {
+        transform: rotate(0)
+      }
+
+      33% {
+        transform: rotate(-35deg)
+      }
+
+      41% {
+        transform: rotate(0)
+      }
+
+      50% {
+        transform: rotate(0)
+      }
+
+      58% {
+        transform: rotate(-35deg)
+      }
+
+      66% {
+        transform: rotate(0)
+      }
+
+      100% {
+        transform: rotate(0)
+      }
+    }
+
+    /* Jiaobei animation */
+    @keyframes jiaobeiFall1 {
+      0% {
+        transform: translateY(0) rotateX(0)
+      }
+
+      40% {
+        transform: translateY(80px) rotateX(720deg)
+      }
+
+      60% {
+        transform: translateY(60px) rotateX(800deg)
+      }
+
+      80% {
+        transform: translateY(75px) rotateX(850deg)
+      }
+
+      100% {
+        transform: translateY(80px) rotateX(var(--final-rot1))
+      }
+    }
+
+    @keyframes jiaobeiFall2 {
+      0% {
+        transform: translateY(0) rotateX(0)
+      }
+
+      45% {
+        transform: translateY(80px) rotateX(540deg)
+      }
+
+      65% {
+        transform: translateY(55px) rotateX(650deg)
+      }
+
+      85% {
+        transform: translateY(78px) rotateX(700deg)
+      }
+
+      100% {
+        transform: translateY(80px) rotateX(var(--final-rot2))
+      }
+    }
+
+    .jiaobei-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .75);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .jiaobei-box {
+      background: linear-gradient(135deg, #1A1A2E, #16213E);
+      border: 1px solid rgba(218, 165, 32, .3);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      max-width: 420px;
+      width: 92%;
+      max-height: 90vh;
+      overflow-y: auto
+    }
+
+    .jiaobei-piece {
+      display: inline-block;
+      width: 50px;
+      height: 80px;
+      margin: 0 12px;
+      perspective: 200px
+    }
+
+    .jiaobei-inner {
+      width: 100%;
+      height: 100%;
+      position: relative
+    }
+
+    .jiaobei-flat,
+    .jiaobei-round {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 0 0 50% 50%/0 0 80% 80%;
+      backface-visibility: hidden
+    }
+
+    .jiaobei-flat {
+      background: linear-gradient(135deg, #C0392B, #96281B)
+    }
+
+    .jiaobei-round {
+      background: linear-gradient(135deg, #DAA520, #B8860B);
+      transform: rotateX(180deg)
+    }
+
+    @keyframes ember {
+
+      0%,
+      100% {
+        box-shadow: 0 0 6px 3px rgba(255, 100, 0, .5)
+      }
+
+      50% {
+        box-shadow: 0 0 14px 7px rgba(255, 80, 0, .8)
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes glow {
+
+      0%,
+      100% {
+        text-shadow: 0 0 8px rgba(255, 215, 0, .1)
+      }
+
+      50% {
+        text-shadow: 0 0 24px rgba(255, 215, 0, .5)
+      }
+    }
+
+    @keyframes lighterIn {
+      0% {
+        opacity: 0;
+        transform: translate(55px, 15px) rotate(18deg)
+      }
+
+      55% {
+        opacity: 1;
+        transform: translate(0, -3px) rotate(-7deg)
+      }
+
+      100% {
+        transform: translate(0, 0) rotate(-5deg)
+      }
+    }
+
+    @keyframes lighterFlame {
+
+      0%,
+      100% {
+        height: 18px;
+        opacity: .8
+      }
+
+      50% {
+        height: 24px;
+        opacity: 1
+      }
+    }
+
+    @keyframes lighterOut {
+      0% {
+        opacity: 1;
+        transform: rotate(-5deg)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(60px, 25px) rotate(22deg)
+      }
+    }
+
+    @keyframes insertStick {
+      0% {
+        transform: translateY(-60px);
+        opacity: 0
+      }
+
+      55% {
+        transform: translateY(3px);
+        opacity: 1
+      }
+
+      75% {
+        transform: translateY(-2px)
+      }
+
+      100% {
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes btnPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(218, 165, 32, .3)
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(218, 165, 32, 0)
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(218, 165, 32, 0)
+      }
+    }
+
+    @keyframes clickRipple {
+      0% {
+        transform: scale(0);
+        opacity: 1
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 0
+      }
+    }
+
+    #setup-page,
+    #scene-page {
+      animation: fadeIn .4s ease-out
+    }
+
+    @media(max-width:480px) {
+      .container {
+        width: 96%;
+        padding: 0 6px
+      }
+
+      .grid3 {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px
+      }
+
+      .grid4 {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px
+      }
+
+      .tab-btn {
+        padding: 10px 12px;
+        font-size: 14px
+      }
+
+      .sel-btn {
+        padding: 12px 8px
+      }
+
+      .sel-btn .label {
+        font-size: 13px
+      }
+
+      .start-btn {
+        font-size: 18px;
+        padding: 16px 0
+      }
+    }
+
+    @media(min-width:481px) and (max-width:768px) {
+      .container {
+        max-width: 700px
+      }
+
+      .grid3 {
+        gap: 12px
+      }
+
+      .grid4 {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px
+      }
+    }
+
+    @media(min-width:769px) {
+      .container {
+        max-width: 960px
+      }
+
+      .grid3 {
+        gap: 16px
+      }
+
+      .grid4 {
+        gap: 14px;
+        grid-template-columns: repeat(4, 1fr)
+      }
+
+      .sel-btn {
+        padding: 18px 14px
+      }
+
+      .sel-btn .label {
+        font-size: 16px
+      }
+
+      .tab-btn {
+        padding: 14px 28px;
+        font-size: 17px
+      }
+
+      .start-btn {
+        font-size: 22px;
+        padding: 20px 0
+      }
+
+      .scene-btn {
+        padding: 14px 32px;
+        font-size: 16px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+
+    // ═══════════ DATA ═══════════
+    const DEITIES = [
+      { id: "none", name: "僅燒香", icon: "🔥", desc: "不指定神明", img: "" },
+      { id: "mazu", name: "媽祖", icon: "🌊", desc: "天上聖母", img: "images/deity_mazu.png" },
+      { id: "guanyin", name: "觀世音菩薩", icon: "🪷", desc: "大慈大悲", img: "images/deity_guanyin.png" },
+      { id: "guan", name: "關聖帝君", icon: "⚔️", desc: "武聖關公", img: "images/deity_guan.png" },
+      { id: "tudi", name: "土地公", icon: "🏔️", desc: "福德正神", img: "images/deity_tudi.png" },
+      { id: "caishen", name: "財神爺", icon: "💰", desc: "武財神趙公明", img: "images/deity_caishen.png" },
+      { id: "buddha", name: "釋迦牟尼佛", icon: "☸️", desc: "佛祖", img: "images/deity_buddha.png" },
+      { id: "jade", name: "玉皇大帝", icon: "👑", desc: "天公", img: "images/deity_jade.png" },
+      { id: "wenchang", name: "文昌帝君", icon: "📚", desc: "考試之神", img: "images/deity_wenchang.png" },
+      { id: "yuelao", name: "月老", icon: "🎀", desc: "姻緣之神", img: "images/deity_yuelao.png" },
+      { id: "baosheng", name: "保生大帝", icon: "🏥", desc: "醫神", img: "images/deity_baosheng.png" },
+      { id: "zhusheng", name: "註生娘娘", icon: "👶", desc: "求子之神", img: "images/deity_zhusheng.png" },
+    ];
+    const BRANDS = [
+      { id: "laoshan", name: "老山檀香", color: "#C4A35A", rate: 1, smoke: "180,170,150" },
+      { id: "agarwood", name: "沉香", color: "#3E2723", rate: .8, smoke: "160,150,140" },
+      { id: "sandalwood", name: "檀香", color: "#D4A574", rate: 1.1, smoke: "200,190,170" },
+      { id: "chenpi", name: "陳皮香", color: "#8D6E63", rate: 1.2, smoke: "190,170,140" },
+      { id: "aiqing", name: "艾草香", color: "#6B8E23", rate: 1.3, smoke: "170,180,160" },
+      { id: "jasmine", name: "茉莉香", color: "#F5F0E1", rate: 1, smoke: "220,210,200" },
+      { id: "lotus", name: "蓮花香", color: "#E8B4B8", rate: .9, smoke: "210,200,195" },
+      { id: "guihua", name: "桂花香", color: "#DAA520", rate: 1.1, smoke: "200,190,160" },
+      { id: "mugwort", name: "薄荷香", color: "#98D8C8", rate: 1.4, smoke: "180,200,190" },
+    ];
+    const THICKS = [{ id: "thin", name: "細香", w: 2, bt: 25 }, { id: "medium", name: "中香", w: 3.5, bt: 40 }, { id: "thick", name: "粗香", w: 5, bt: 60 }];
+    const LENS = [{ id: "short", name: "短香(一尺)", h: 130, bt: 20 }, { id: "medium", name: "中香(尺三)", h: 180, bt: 35 }, { id: "long", name: "長香(尺六)", h: 230, bt: 50 }];
+    const CENSERS = [
+      { id: "classic", name: "古典銅爐", c1: "#B8860B", c2: "#8B6914", ac: "#DAA520" },
+      { id: "stone", name: "石雕香爐", c1: "#808080", c2: "#696969", ac: "#A9A9A9" },
+      { id: "ceramic", name: "青瓷香爐", c1: "#7FCDCD", c2: "#5BA8A8", ac: "#9DE0E0" },
+      { id: "red", name: "紅木香爐", c1: "#8B0000", c2: "#5C0000", ac: "#CD5C5C" },
+      { id: "gold", name: "鎏金香爐", c1: "#FFD700", c2: "#B8860B", ac: "#FFF8DC" },
+      { id: "purple", name: "紫砂香爐", c1: "#6B3A5D", c2: "#4A2040", ac: "#8B5A7D" },
+    ];
+    const OCATS = [
+      { cat: "🍎水果", items: ["蘋果", "橘子", "香蕉", "鳳梨", "葡萄", "西瓜", "芒果", "柚子", "水梨", "荔枝", "龍眼", "火龍果", "蓮霧", "柿子", "楊桃", "棗子", "芭樂", "木瓜"] },
+      { cat: "🍖三牲", items: ["全雞", "全鴨", "全魚", "豬肉", "豬腳", "滷蛋", "燒肉", "五花肉", "魷魚", "蝦"] },
+      { cat: "🍚飯菜", items: ["白飯", "油飯", "米糕", "麵線", "滷味拼盤", "四神湯", "佛跳牆", "炒米粉", "菜頭湯", "筍湯"] },
+      { cat: "🍡糕粿", items: ["壽桃", "發糕", "紅龜粿", "麻糬", "湯圓", "粽子", "年糕", "鳳梨酥", "月餅", "綠豆糕", "花生糖", "蛋糕", "桂花糕"] },
+      { cat: "🌸鮮花", items: ["菊花", "蓮花", "百合", "玫瑰", "蘭花", "牡丹", "茉莉花", "康乃馨", "向日葵", "桂花"] },
+      { cat: "🍘零食", items: ["花生", "瓜子", "開心果", "紅棗", "核桃", "糖果", "餅乾", "泡麵", "沙琪瑪", "甜甜圈", "仙貝", "旺旺", "乖乖"] },
+    ];
+    const GOLD_P = [
+      { id: "shou", name: "壽金", cl: "#FFD700", ac: "#E33" }, { id: "gua", name: "刈金", cl: "#FFCC00", ac: "#C00" },
+      { id: "tian", name: "天金", cl: "#FFE44D", ac: "#F33" }, { id: "fu", name: "福金", cl: "#FFDD33", ac: "#D22" },
+      { id: "da", name: "大百壽金", cl: "#FFC107", ac: "#E55" }, { id: "tai", name: "太極金", cl: "#FFB300", ac: "#D44" },
+    ];
+    const SILVER_P = [
+      { id: "xiao", name: "小銀", cl: "#C0C0C0", ac: "#888" }, { id: "da", name: "大銀", cl: "#D4D4D4", ac: "#999" },
+      { id: "jing", name: "經衣", cl: "#E0E0E0", ac: "#AAA" }, { id: "geng", name: "更衣", cl: "#B0B0B0", ac: "#777" },
+    ];
+    const WINES = [
+      { id: "rice", name: "米酒", color: "rgba(255,255,240,.7)" }, { id: "kaoliang", name: "高粱酒", color: "rgba(255,255,245,.75)" },
+      { id: "tea", name: "清茶", color: "rgba(180,210,140,.6)" }, { id: "soda", name: "汽水", color: "rgba(255,200,100,.5)" },
+    ];
+    const FOOD_EMOJI = {
+      "蘋果": "🍎", "橘子": "🍊", "香蕉": "🍌", "鳳梨": "🍍", "葡萄": "🍇", "西瓜": "🍉", "芒果": "🥭", "柚子": "🍈", "水梨": "🍐", "荔枝": "🍒", "龍眼": "🫐", "火龍果": "🐉", "蓮霧": "🍑", "柿子": "🟠", "楊桃": "⭐", "棗子": "🫒", "芭樂": "🍏", "木瓜": "🍈",
+      "全雞": "🐔", "全鴨": "🦆", "全魚": "🐟", "豬肉": "🥩", "豬腳": "🦵", "滷蛋": "🥚", "燒肉": "🥓", "五花肉": "🥩", "魷魚": "🦑", "蝦": "🦐",
+      "白飯": "🍚", "油飯": "🍚", "米糕": "🍘", "麵線": "🍜", "滷味拼盤": "🍲", "四神湯": "🍵", "佛跳牆": "🥘", "炒米粉": "🍝", "菜頭湯": "🥣", "筍湯": "🥣",
+      "壽桃": "🍑", "發糕": "🧁", "紅龜粿": "🔴", "麻糬": "🍡", "湯圓": "🍡", "粽子": "🫔", "年糕": "🍮", "鳳梨酥": "🥮", "月餅": "🥮", "綠豆糕": "🍵", "花生糖": "🍬", "蛋糕": "🎂", "桂花糕": "🍰",
+      "菊花": "🌼", "蓮花": "🪷", "百合": "🌸", "玫瑰": "🌹", "蘭花": "🌺", "牡丹": "🌺", "茉莉花": "🤍", "康乃馨": "🌷", "向日葵": "🌻", "桂花": "🌼",
+      "花生": "🥜", "瓜子": "🌰", "開心果": "🥜", "紅棗": "🫘", "核桃": "🌰", "糖果": "🍬", "餅乾": "🍪", "泡麵": "🍜", "沙琪瑪": "🍞", "甜甜圈": "🍩", "仙貝": "🍘", "旺旺": "🧧", "乖乖": "🟢"
+    };
+
+    function foodSVG(name, sz) {
+      var em = FOOD_EMOJI[name];
+      if (em) return '<div style="font-size:' + Math.round(sz * 0.85) + 'px;line-height:1;text-align:center">' + em + '</div>';
+      return '<svg viewBox="0 0 44 44" width="' + sz + '" height="' + sz + '"><circle cx="22" cy="23" r="16" fill="#D4A35A" opacity=".85"/><text x="22" y="27" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.7)" font-weight="bold">' + name.slice(0, 1) + '</text></svg>';
+    }
+    function censerSVG(s, w) {
+      var h = Math.round(w * .45);
+      return '<svg viewBox="0 0 200 90" width="' + w + '" height="' + h + '"><defs><linearGradient id="cg' + s.id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="' + s.c1 + '"/><stop offset="100%" stop-color="' + s.c2 + '"/></linearGradient></defs><ellipse cx="100" cy="30" rx="90" ry="14" fill="' + s.ac + '" opacity=".3"/><path d="M20 30Q15 60 30 80L170 80Q185 60 180 30Z" fill="url(#cg' + s.id + ')" stroke="' + s.ac + '" stroke-width="1.5"/><ellipse cx="100" cy="30" rx="90" ry="14" fill="' + s.c1 + '" stroke="' + s.ac + '" stroke-width="1"/><ellipse cx="100" cy="30" rx="75" ry="10" fill="#333" opacity=".5"/><ellipse cx="100" cy="30" rx="72" ry="8" fill="#9E9E9E" opacity=".3"/><rect x="40" y="78" width="14" height="10" rx="3" fill="' + s.c2 + '"/><rect x="93" y="78" width="14" height="10" rx="3" fill="' + s.c2 + '"/><rect x="146" y="78" width="14" height="10" rx="3" fill="' + s.c2 + '"/></svg>';
+    }
+
+    // ═══════════ STATE ═══════════
+    var S = {
+      phase: "setup", tab: "deity", oCat: 0,
+      deity: DEITIES[0], brand: BRANDS[0], thick: THICKS[1], len: LENS[1],
+      count: 3, censer: CENSERS[0], people: 1,
+      offerings: [], gP: [], sP: [], cups: 3, chops: 3, wine: WINES[0],
+      elapsed: 0, lighter: null, wineFilled: false, showLeave: false,
+      jiaoResult: null, jiaoText: "",
+    };
+    var totalTime = () => (S.thick.bt + S.len.bt) * 60 * S.brand.rate;
+    var burnPct = () => Math.min(1, S.elapsed / totalTime());
+    var timerIv = null, smokeRaf = null, smokePs = [];
+
+    // ═══════════ RENDER ═══════════
+    function h(tag, attrs, children) {
+      var el = document.createElement(tag);
+      if (attrs) Object.keys(attrs).forEach(function (k) {
+        if (k === 'style' && typeof attrs[k] === 'object') { Object.assign(el.style, attrs[k]) }
+        else if (k.startsWith('on')) { el.addEventListener(k.slice(2).toLowerCase(), attrs[k]) }
+        else el.setAttribute(k, attrs[k]);
+      });
+      if (children !== undefined) {
+        if (typeof children === 'string') el.innerHTML = children;
+        else if (Array.isArray(children)) children.forEach(function (c) { if (c) el.appendChild(c) });
+        else if (children instanceof HTMLElement) el.appendChild(children);
+      }
+      return el;
+    }
+    function addClickEffect(el) {
+      el.addEventListener('click', function (e) {
+        var ripple = document.createElement('div');
+        var rect = el.getBoundingClientRect();
+        var sz = Math.max(rect.width, rect.height) * 1.5;
+        ripple.style.cssText = 'position:absolute;top:50%;left:50%;width:' + sz + 'px;height:' + sz + 'px;margin-left:-' + (sz / 2) + 'px;margin-top:-' + (sz / 2) + 'px;border-radius:50%;background:radial-gradient(circle,rgba(218,165,32,.35),transparent 70%);pointer-events:none;animation:clickRipple .5s ease-out forwards;z-index:99';
+        el.appendChild(ripple);
+        setTimeout(function () { ripple.remove(); }, 500);
+      });
+    }
+    function render() {
+      var app = document.getElementById('app');
+      app.innerHTML = '';
+      if (S.phase === 'setup') renderSetup(app);
+      else renderScene(app);
+    }
+
+    // ═══════════ SETUP PAGE ═══════════
+    function renderSetup(app) {
+      var page = h('div', { id: 'setup-page', style: { padding: '16px 0 32px' } });
+      page.appendChild(h('div', { style: { textAlign: 'center', marginBottom: '22px' } }, '<div style="font-size:60px">🪔</div><h1 style="font-size:36px;font-weight:900;color:#FFD700;margin:0">虔誠燒香</h1><p style="color:#8B7D6B;font-size:16px;margin:6px 0 0">選擇您的供品與祈願</p>'));
+      var tabs = h('div', { class: 'tabs' });
+      [{ k: "deity", l: "🙏神明" }, { k: "incense", l: "🪔香品" }, { k: "censer", l: "🏺香爐" }, { k: "offering", l: "🍎供品" }, { k: "paper", l: "🧧金銀紙" }, { k: "cups", l: "🍵酒杯" }].forEach(function (t) {
+        var b = h('button', { class: 'tab-btn' + (S.tab === t.k ? ' active' : ''), onClick: function () { S.tab = t.k; render(); } }, t.l);
+        addClickEffect(b); tabs.appendChild(b);
+      });
+      page.appendChild(tabs);
+      var cont = h('div', { class: 'container' });
+
+      if (S.tab === 'deity') {
+        var g = h('div', { class: 'grid3' });
+        DEITIES.forEach(function (d) {
+          var inner = d.img ? '<img src="' + d.img + '" class="deity-img" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'"><div style="font-size:36px;display:none">' + d.icon + '</div>' : '<div style="font-size:36px">' + d.icon + '</div>';
+          var b = h('button', { class: 'sel-btn' + (S.deity.id === d.id ? ' active' : ''), onClick: function () { S.deity = d; render(); } },
+            inner + '<div class="label">' + d.name + '</div><div style="font-size:13px;color:#888">' + d.desc + '</div>');
+          addClickEffect(b); g.appendChild(b);
+        });
+        cont.appendChild(g);
+      }
+      else if (S.tab === 'incense') {
+        cont.appendChild(h('div', { style: { fontSize: '16px', color: '#BBA86A', marginBottom: '8px' } }, '品牌'));
+        var g = h('div', { class: 'grid3' });
+        BRANDS.forEach(function (b) {
+          var btn = h('button', { class: 'sel-btn' + (S.brand.id === b.id ? ' active' : ''), onClick: function () { S.brand = b; render(); } },
+            '<div style="width:22px;height:22px;border-radius:50%;background:' + b.color + ';margin:0 auto 6px;border:1px solid rgba(255,255,255,.15)"></div><div class="label">' + b.name + '</div>');
+          addClickEffect(btn); g.appendChild(btn);
+        });
+        cont.appendChild(g);
+        cont.appendChild(h('div', { style: { fontSize: '16px', color: '#BBA86A', margin: '16px 0 8px' } }, '粗細'));
+        var r = h('div', { class: 'flex-row' });
+        THICKS.forEach(function (t) {
+          var btn = h('button', { class: 'sel-btn' + (S.thick.id === t.id ? ' active' : ''), style: { flex: '1' }, onClick: function () { S.thick = t; render(); } },
+            '<div style="width:' + (t.w * 2) + 'px;height:22px;background:' + S.brand.color + ';margin:0 auto 2px;border-radius:2px"></div><div class="label">' + t.name + '</div>');
+          addClickEffect(btn); r.appendChild(btn);
+        });
+        cont.appendChild(r);
+        cont.appendChild(h('div', { style: { fontSize: '16px', color: '#BBA86A', margin: '16px 0 8px' } }, '長度'));
+        var r2 = h('div', { class: 'flex-row' });
+        LENS.forEach(function (l) {
+          var btn = h('button', { class: 'sel-btn' + (S.len.id === l.id ? ' active' : ''), style: { flex: '1' }, onClick: function () { S.len = l; render(); } },
+            '<div style="width:' + (S.thick.w * 2) + 'px;height:' + (l.h / 6) + 'px;background:' + S.brand.color + ';margin:0 auto 2px;border-radius:2px"></div><div class="label">' + l.name + '</div>');
+          addClickEffect(btn); r2.appendChild(btn);
+        });
+        cont.appendChild(r2);
+        cont.appendChild(h('div', { style: { fontSize: '16px', color: '#BBA86A', margin: '16px 0 8px' } }, '數量'));
+        var r3 = h('div', { class: 'flex-row' });
+        [1, 3, 5, 7, 9].forEach(function (n) {
+          var btn = h('button', { class: 'sel-btn' + (S.count === n ? ' active' : ''), style: { width: '64px', height: '64px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0' }, onClick: function () { S.count = n; render(); } },
+            '<div style="font-size:22px;font-weight:700;color:' + (S.count === n ? '#FFD700' : '#BBA86A') + '">' + n + '</div><div style="font-size:13px;color:#888">支</div>');
+          addClickEffect(btn); r3.appendChild(btn);
+        });
+        cont.appendChild(r3);
+
+        // People count
+        cont.appendChild(h('div', { style: { fontSize: '16px', color: '#BBA86A', margin: '16px 0 8px' } }, '👥 拜拜人數'));
+        var rp = h('div', { class: 'flex-row' });
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(function (n) {
+          var btn = h('button', { class: 'sel-btn' + (S.people === n ? ' active' : ''), style: { width: '52px', height: '52px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0' }, onClick: function () { S.people = n; render(); } },
+            '<div style="font-size:18px;font-weight:700;color:' + (S.people === n ? '#FFD700' : '#BBA86A') + '">' + n + '</div><div style="font-size:11px;color:#888">人</div>');
+          addClickEffect(btn); rp.appendChild(btn);
+        });
+        cont.appendChild(rp);
+      }
+      else if (S.tab === 'censer') {
+        var g = h('div', { class: 'grid2' });
+        CENSERS.forEach(function (c) {
+          var btn = h('button', { class: 'sel-btn' + (S.censer.id === c.id ? ' active' : ''), style: { padding: '12px 6px' }, onClick: function () { S.censer = c; render(); } });
+          btn.innerHTML = censerSVG(c, 120) + '<div class="label" style="margin-top:4px">' + c.name + '</div>';
+          g.appendChild(btn);
+        });
+        cont.appendChild(g);
+      }
+      else if (S.tab === 'offering') {
+        var catRow = h('div', { class: 'flex-row', style: { marginBottom: '6px' } });
+        OCATS.forEach(function (c, i) {
+          var btn = h('button', { style: { padding: '6px 12px', borderRadius: '6px', fontSize: '13px', fontWeight: '600', border: S.oCat === i ? '1px solid #DAA520' : '1px solid rgba(255,255,255,.06)', background: S.oCat === i ? 'rgba(218,165,32,.1)' : 'transparent', color: S.oCat === i ? '#FFD700' : '#8B7D6B', transition: 'all .15s ease' }, onClick: function () { S.oCat = i; render(); } }, c.cat);
+          catRow.appendChild(btn);
+        });
+        cont.appendChild(catRow);
+        var g = h('div', { class: 'grid4' });
+        OCATS[S.oCat].items.forEach(function (name) {
+          var sel = S.offerings.indexOf(name) >= 0;
+          var btn = h('button', {
+            class: 'sel-btn' + (sel ? ' active' : ''), style: { padding: '8px 4px' }, onClick: function () {
+              var idx = S.offerings.indexOf(name);
+              if (idx >= 0) S.offerings.splice(idx, 1); else S.offerings.push(name);
+              render();
+            }
+          });
+          btn.innerHTML = foodSVG(name, 38) + '<div style="font-size:11px;color:' + (sel ? '#FFD700' : '#BBA86A') + ';line-height:1.2">' + name + '</div>';
+          g.appendChild(btn);
+        });
+        cont.appendChild(g);
+        if (S.offerings.length > 0) cont.appendChild(h('div', { style: { marginTop: '8px', fontSize: '13px', color: '#BBA86A' } }, '已選 ' + S.offerings.length + ' 項'));
+      }
+      else if (S.tab === 'paper') {
+        cont.appendChild(h('div', { style: { fontSize: '14px', color: '#FFD700', marginBottom: '6px' } }, '金紙（點擊增疊 1~5，再點移除）'));
+        var g = h('div', { class: 'grid3' });
+        GOLD_P.forEach(function (p) {
+          var ex = S.gP.find(function (x) { return x.id === p.id });
+          var btn = h('button', {
+            class: 'sel-btn' + (ex ? ' active' : ''), style: { padding: '10px 6px' }, onClick: function () {
+              var ex2 = S.gP.find(function (x) { return x.id === p.id });
+              if (ex2) { if (ex2.qty >= 5) S.gP = S.gP.filter(function (x) { return x.id !== p.id }); else ex2.qty++; }
+              else S.gP.push({ id: p.id, name: p.name, cl: p.cl, ac: p.ac, qty: 1 });
+              render();
+            }
+          });
+          btn.innerHTML = '<div style="width:32px;height:22px;border-radius:3px;background:' + p.cl + ';border:1px solid ' + p.ac + ';margin:0 auto 4px"></div><div class="label">' + p.name + '</div>' + (ex ? '<div style="font-size:11px;color:#FF6B00">×' + ex.qty + '疊</div>' : '');
+          addClickEffect(btn); g.appendChild(btn);
+        });
+        cont.appendChild(g);
+        cont.appendChild(h('div', { style: { fontSize: '14px', color: '#C0C0C0', margin: '14px 0 6px' } }, '銀紙'));
+        var g2 = h('div', { class: 'grid2' });
+        SILVER_P.forEach(function (p) {
+          var ex = S.sP.find(function (x) { return x.id === p.id });
+          var btn = h('button', {
+            class: 'sel-btn' + (ex ? ' active' : ''), style: { padding: '10px 6px' }, onClick: function () {
+              var ex2 = S.sP.find(function (x) { return x.id === p.id });
+              if (ex2) { if (ex2.qty >= 5) S.sP = S.sP.filter(function (x) { return x.id !== p.id }); else ex2.qty++; }
+              else S.sP.push({ id: p.id, name: p.name, cl: p.cl, ac: p.ac, qty: 1 });
+              render();
+            }
+          });
+          btn.innerHTML = '<div style="width:32px;height:22px;border-radius:3px;background:' + p.cl + ';border:1px solid ' + p.ac + ';margin:0 auto 4px"></div><div class="label">' + p.name + '</div>' + (ex ? '<div style="font-size:11px;color:#CCC">×' + ex.qty + '疊</div>' : '');
+          addClickEffect(btn); g2.appendChild(btn);
+        });
+        cont.appendChild(g2);
+      }
+      else if (S.tab === 'cups') {
+        cont.appendChild(h('div', { style: { fontSize: '14px', color: '#BBA86A', marginBottom: '6px' } }, '酒杯數量'));
+        var r = h('div', { class: 'flex-row', style: { marginBottom: '12px' } });
+        [0, 1, 3, 5, 7, 12].forEach(function (n) {
+          var btn = h('button', { class: 'sel-btn' + (S.cups === n ? ' active' : ''), style: { width: '52px', height: '52px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0' }, onClick: function () { S.cups = n; render(); } },
+            '<div style="font-size:17px;font-weight:700;color:' + (S.cups === n ? '#FFD700' : '#BBA86A') + '">' + n + '</div><div style="font-size:11px;color:#777">' + (n === 0 ? '不放' : '杯') + '</div>');
+          addClickEffect(btn); r.appendChild(btn);
+        });
+        cont.appendChild(r);
+        cont.appendChild(h('div', { style: { fontSize: '14px', color: '#BBA86A', marginBottom: '6px' } }, '筷子組數'));
+        var r2 = h('div', { class: 'flex-row', style: { marginBottom: '12px' } });
+        [0, 1, 3, 5, 7, 12].forEach(function (n) {
+          var btn = h('button', { class: 'sel-btn' + (S.chops === n ? ' active' : ''), style: { width: '52px', height: '52px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0' }, onClick: function () { S.chops = n; render(); } },
+            '<div style="font-size:17px;font-weight:700;color:' + (S.chops === n ? '#FFD700' : '#BBA86A') + '">' + n + '</div><div style="font-size:11px;color:#777">' + (n === 0 ? '不放' : '雙') + '</div>');
+          addClickEffect(btn); r2.appendChild(btn);
+        });
+        cont.appendChild(r2);
+        cont.appendChild(h('div', { style: { fontSize: '14px', color: '#BBA86A', marginBottom: '6px' } }, '倒入的酒/茶'));
+        var g = h('div', { class: 'grid3' });
+        WINES.forEach(function (w) {
+          var btn = h('button', { class: 'sel-btn' + (S.wine.id === w.id ? ' active' : ''), style: { padding: '10px 6px' }, onClick: function () { S.wine = w; render(); } },
+            '<div style="width:18px;height:18px;border-radius:50%;background:' + w.color + ';margin:0 auto 4px;border:1px solid rgba(0,0,0,.12)"></div><div class="label">' + w.name + '</div>');
+          addClickEffect(btn); g.appendChild(btn);
+        });
+        cont.appendChild(g);
+      }
+
+      // Summary
+      var tt = totalTime();
+      var allP = [].concat(S.gP, S.sP);
+      var sumDiv = h('div', { style: { marginTop: '16px', padding: '12px', borderRadius: '8px', background: 'rgba(218,165,32,.04)', border: '1px solid rgba(218,165,32,.08)', fontSize: '13px', color: '#BBA86A', lineHeight: '1.6' } });
+      var sumText = (S.deity.id !== 'none' ? '🙏' + S.deity.name : '🔥自由燒香') + ' ・ ' + S.brand.name + ' ・ ' + S.thick.name + ' ・ ' + S.len.name + ' ・ ' + S.count + '支 ・ ' + S.censer.name + ' ・ 👥' + S.people + '人';
+      if (S.cups > 0) sumText += ' ・ 🍵' + S.cups + '杯' + S.wine.name;
+      if (S.offerings.length > 0) sumText += '<br>🎁供品' + S.offerings.length + '項';
+      if (allP.length > 0) sumText += '<br>🧧' + allP.map(function (p) { return p.name + '×' + p.qty }).join('、');
+      sumText += '<br><span style="font-size:11px;color:#777">≈ ' + Math.round(tt / 60) + ' 分鐘</span>';
+      sumDiv.innerHTML = sumText;
+      cont.appendChild(sumDiv);
+      var startBtn = h('button', { class: 'start-btn', onClick: startBurn }, '🔥 點香開始');
+      cont.appendChild(startBtn);
+      page.appendChild(cont);
+      app.appendChild(page);
+    }
+
+    // ═══════════ SCENE PAGE ═══════════
+    function renderScene(app) {
+      var page = h('div', { id: 'scene-page', style: { display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '50px 12px 16px', minHeight: '100vh' } });
+
+      // Deity with image
+      if (S.deity.id !== 'none') {
+        var deityHtml = '<div style="text-align:center;margin-bottom:8px;padding:8px 20px;background:rgba(139,0,0,.06);border-radius:10px;border:1px solid rgba(218,165,32,.14)">';
+        if (S.deity.img) deityHtml += '<img src="' + S.deity.img + '" class="deity-img-lg" onerror="this.outerHTML=\'<div style=font-size:50px>' + S.deity.icon + '</div>\'">';
+        else deityHtml += '<div style="font-size:50px">' + S.deity.icon + '</div>';
+        deityHtml += '<div style="font-size:20px;font-weight:700;color:#FFD700">' + S.deity.name + '</div><div style="font-size:13px;color:#BBA86A">' + S.deity.desc + '</div></div>';
+        page.innerHTML += deityHtml;
+      }
+
+      // Bowing animation phase
+      if (S.phase === 'bowing') {
+        var bowDiv = h('div', { style: { textAlign: 'center', margin: '12px 0' } });
+        var frontRow = Math.min(S.people, 5);
+        var backRow = S.people > 5 ? S.people - 5 : 0;
+        var html = '<div style="font-size:16px;color:#FFD700;margin-bottom:10px">🙏 ' + S.people + '人虔誠參拜中...</div>';
+        // back row
+        if (backRow > 0) {
+          html += '<div style="display:flex;justify-content:center;gap:10px;margin-bottom:6px;opacity:.7;transform:scale(.85)">';
+          for (var i = 0; i < backRow; i++) html += personHTML(i + 5);
+          html += '</div>';
+        }
+        // front row
+        html += '<div style="display:flex;justify-content:center;gap:10px">';
+        for (var i = 0; i < frontRow; i++) html += personHTML(i);
+        html += '</div>';
+        bowDiv.innerHTML = html;
+        page.appendChild(bowDiv);
+      }
+
+      // Scene container with incense + censer
+      var spread = Math.min(260, S.count * 24 + 32);
+      var censerW = Math.max(170, spread + 50);
+      var censerH = Math.round(censerW * .45);
+      var stickH = S.len.h + 22;
+      var plantDepth = 32;
+      var sceneH = stickH - plantDepth + censerH + 10;
+      var sceneW = Math.min(500, Math.max(320, window.innerWidth * 0.92));
+      var scene = h('div', { style: { position: 'relative', width: sceneW + 'px', maxWidth: '100%', height: sceneH + 'px' } });
+
+      // Smoke canvas
+      var canvas = h('canvas', { id: 'smoke-canvas', width: Math.round(sceneW), height: sceneH, style: { position: 'absolute', top: '0', left: '0', pointerEvents: 'none', zIndex: '15' } });
+      scene.appendChild(canvas);
+
+      // Incense sticks in censer
+      if (S.phase !== 'lighting' && S.phase !== 'bowing') {
+        var sticksDiv = h('div', { style: { position: 'absolute', bottom: (censerH - plantDepth - 8) + 'px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: Math.max(2, 14 - S.count) + 'px', justifyContent: 'center', alignItems: 'flex-end', zIndex: '10' } });
+        for (var i = 0; i < S.count; i++) {
+          var w = S.thick.w, ht = S.len.h;
+          var bp = S.phase === 'done' ? 1 : burnPct();
+          var burnedH = ht * bp;
+          var remainH = ht - burnedH;
+          var glowing = S.phase === 'burning' && bp < 1;
+          var stick = h('div', { 'data-stick': '1', style: { display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', animation: S.phase === 'inserting' ? 'insertStick .8s cubic-bezier(.34,1.56,.64,1) forwards' : 'none' } });
+          if (glowing) stick.innerHTML += '<div style="width:' + (w + 6) + 'px;height:5px;border-radius:50%;background:radial-gradient(circle,#FF6B00 25%,#FF4500 55%,transparent);animation:ember 1s infinite;margin-bottom:-1px;z-index:2"></div>';
+          if (burnedH > 1) stick.innerHTML += '<div data-ash="1" style="width:' + (w - .5) + 'px;height:' + burnedH + 'px;background:linear-gradient(to bottom,#999,#bbb,#aaa);opacity:.45;border-radius:1px 1px 0 0;transition:height 1s linear"></div>';
+          stick.innerHTML += '<div data-remain="1" style="width:' + w + 'px;height:' + Math.max(remainH, 0) + 'px;background:linear-gradient(135deg,' + S.brand.color + 'ee,' + S.brand.color + ');border-radius:1px 1px 2px 2px;transition:height 1s linear"></div>';
+          stick.innerHTML += '<div style="width:' + (w + 1) + 'px;height:30px;background:linear-gradient(to bottom,#DEB887,#C4A060);border-radius:0 0 1px 1px"></div>';
+          sticksDiv.appendChild(stick);
+        }
+        scene.appendChild(sticksDiv);
+      }
+
+      // Static sticks during lighting - lighter on the RIGHT side, away from deity
+      if (S.phase === 'lighting') {
+        // Sticks held to the right side of scene for lighting
+        var lightingX = Math.min(sceneW - 80, sceneW * 0.75);
+        var sticksDiv = h('div', { style: { position: 'absolute', bottom: (censerH + 20) + 'px', left: lightingX + 'px', display: 'flex', gap: Math.max(2, 14 - S.count) + 'px', justifyContent: 'center', zIndex: '5' } });
+        for (var i = 0; i < S.count; i++) {
+          sticksDiv.innerHTML += '<div style="display:flex;flex-direction:column;align-items:center"><div style="width:' + S.thick.w + 'px;height:' + S.len.h + 'px;background:linear-gradient(135deg,' + S.brand.color + 'ee,' + S.brand.color + ');border-radius:1px 1px 2px 2px"></div><div style="width:' + (S.thick.w + 1) + 'px;height:22px;background:linear-gradient(to bottom,#DEB887,#C4A060)"></div></div>';
+        }
+        var lt = h('div', { id: 'lighter', style: { position: 'absolute', top: '-20px', left: '50%', marginLeft: '-20px', zIndex: '30', animation: S.lighter === 'in' ? 'lighterIn .9s cubic-bezier(.25,.46,.45,.94) forwards' : S.lighter === 'out' ? 'lighterOut .6s ease-in forwards' : 'none', transformOrigin: 'bottom center' } });
+        lt.innerHTML = '<div style="position:relative;width:40px;height:60px">' + (S.lighter !== 'out' ? '<div style="position:absolute;top:-14px;left:11px;width:18px;z-index:2"><div style="width:100%;height:22px;animation:lighterFlame .35s infinite;background:radial-gradient(ellipse at bottom,#FFF7AA,#FFD700 20%,#FF8C00 50%,#FF4500 78%,transparent);border-radius:50% 50% 40% 40%/65% 65% 35% 35%;filter:blur(1px)"></div></div>' : '') + '<div style="position:absolute;bottom:0;left:5px;width:30px;height:42px;border-radius:5px 5px 7px 7px;background:linear-gradient(160deg,#E74C3C,#C0392B 60%,#96281B);border:1px solid rgba(0,0,0,.12)"><div style="position:absolute;top:-7px;left:4px;width:22px;height:12px;background:linear-gradient(to bottom,#D5D8DC,#ABB2B9);border-radius:3px 3px 1px 1px"><div style="width:9px;height:4px;background:#7F8C8D;border-radius:2px;margin:2px auto 0"></div></div></div></div>';
+        sticksDiv.appendChild(lt);
+        scene.appendChild(sticksDiv);
+      }
+
+      // Censer - higher z-index to cover stick bases (incense "in" censer)
+      var censerDiv = h('div', { style: { position: 'absolute', bottom: '0', left: '50%', transform: 'translateX(-50%)', zIndex: '12' } });
+      censerDiv.innerHTML = censerSVG(S.censer, censerW);
+      scene.appendChild(censerDiv);
+      page.appendChild(scene);
+
+      // Pouring scene
+      if (S.phase === 'pouring') {
+        page.innerHTML += '<div style="font-size:15px;color:#DAA520;text-align:center;margin:6px 0">🍶 正在倒' + S.wine.name + '...</div>';
+        var pourDiv = h('div', { id: 'pour-area', style: { textAlign: 'center' } });
+        var cupsRow = '<div style="display:flex;gap:4px;justify-content:center">';
+        for (var i = 0; i < S.cups; i++) {
+          cupsRow += '<svg width="24" height="20" viewBox="0 0 24 20"><path d="M3 4Q2 14 5 18L19 18Q22 14 21 4Z" fill="#F5F0E6" stroke="#D4C5A0" stroke-width=".5"/><ellipse cx="12" cy="4" rx="9.5" ry="3.5" fill="#FAF8F0" stroke="#D4C5A0" stroke-width=".4"/><rect class="cup-fill" data-idx="' + i + '" x="4" y="16" width="16" height="0" rx="1" fill="' + S.wine.color + '" opacity=".65"/></svg>';
+        }
+        cupsRow += '</div>';
+        pourDiv.innerHTML = cupsRow;
+        page.appendChild(pourDiv);
+        setTimeout(function () { animatePour(0) }, 300);
+      }
+
+      // Offering table
+      if (S.phase !== 'pouring' && S.phase !== 'bowing') {
+        var allP = [].concat(S.gP, S.sP);
+        var hasItems = S.offerings.length > 0 || allP.length > 0 || S.cups > 0;
+        if (hasItems) {
+          var tw = Math.min(430, Math.max(200, (S.offerings.length + allP.length) * 36 + (S.cups > 0 ? S.cups * 22 + 30 : 0) + 50));
+          var tableWrap = h('div', { style: { marginTop: '4px', width: tw + 'px', maxWidth: '92vw', margin: '4px auto 0' } });
+          var tableTop = h('div', { class: 'offering-table', style: { width: '100%' } });
+          if (S.cups > 0) {
+            var cupSec = '<div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="display:flex;gap:3px">';
+            for (var i = 0; i < S.cups; i++) {
+              cupSec += '<svg width="22" height="18" viewBox="0 0 24 20"><path d="M3 4Q2 14 5 18L19 18Q22 14 21 4Z" fill="#F5F0E6" stroke="#D4C5A0" stroke-width=".5"/><ellipse cx="12" cy="4" rx="9.5" ry="3.5" fill="#FAF8F0" stroke="#D4C5A0" stroke-width=".4"/>' + (S.wineFilled ? '<rect x="4" y="6" width="16" height="10" rx="1" fill="' + S.wine.color + '" opacity=".6"/>' : '') + '</svg>';
+            }
+            cupSec += '</div>';
+            if (S.chops > 0) {
+              cupSec += '<div style="display:flex;gap:5px">';
+              for (var i = 0; i < S.chops; i++) cupSec += '<svg width="10" height="20" viewBox="0 0 10 20"><rect x="2.5" y="0" width="1.3" height="20" rx=".4" fill="#C4A060" transform="rotate(-3 5 10)"/><rect x="5.5" y="0" width="1.3" height="20" rx=".4" fill="#C4A060" transform="rotate(3 5 10)"/></svg>';
+              cupSec += '</div>';
+            }
+            cupSec += '</div>';
+            tableTop.innerHTML += cupSec;
+          }
+          S.offerings.forEach(function (name) {
+            tableTop.innerHTML += '<div style="display:flex;flex-direction:column;align-items:center">' + foodSVG(name, 40) + '<span style="font-size:10px;color:#FFD7D7;margin-top:0">' + name + '</span></div>';
+          });
+          allP.forEach(function (p) {
+            var stack = '<div style="position:relative">';
+            for (var si = 0; si < Math.min(p.qty, 5); si++) {
+              stack += '<div style="width:' + (32 - si) + 'px;height:' + (22 - si) + 'px;border-radius:2px;background:linear-gradient(135deg,' + p.cl + ',' + p.cl + 'cc);border:1px solid ' + p.ac + ';position:' + (si === 0 ? 'relative' : 'absolute') + ';top:' + (si === 0 ? 0 : -si * 3) + 'px;left:' + (si * .5) + 'px;z-index:' + (5 - si) + '">' + (si === 0 ? '<div style="position:absolute;top:2px;left:50%;transform:translateX(-50%);width:12px;height:7px;background:' + p.ac + ';border-radius:1px;opacity:.6"></div>' : '') + '</div>';
+            }
+            stack += '<div style="font-size:9px;color:#FFD7D7;text-align:center;margin-top:2px">' + p.name + '×' + p.qty + '</div></div>';
+            tableTop.innerHTML += stack;
+          });
+          tableWrap.appendChild(tableTop);
+          var legs = h('div', { style: { display: 'flex', justifyContent: 'space-between' } });
+          legs.innerHTML = '<div class="table-leg"></div><div class="table-leg"></div>';
+          tableWrap.appendChild(legs);
+          page.appendChild(tableWrap);
+        }
+      }
+
+      // Timer
+      if (S.phase === 'burning') {
+        var rem = Math.max(0, totalTime() - S.elapsed);
+        var mm = String(Math.floor(rem / 60)).padStart(2, '0');
+        var ss = String(Math.floor(rem % 60)).padStart(2, '0');
+        page.innerHTML += '<div id="burn-timer" style="text-align:center;margin-top:10px"><div style="font-size:13px;color:#999">剩餘時間</div><div id="timer-display" style="font-size:30px;font-weight:700;color:#FFD700">' + mm + ':' + ss + '</div><div style="width:180px;height:4px;background:#333;border-radius:3px;margin:4px auto 0;overflow:hidden"><div id="burn-progress" style="width:' + Math.round(burnPct() * 100) + '%;height:100%;background:linear-gradient(90deg,#FF6B00,#FFD700);transition:width 1s linear"></div></div></div>';
+      }
+      if (S.phase === 'lighting') page.innerHTML += '<div style="text-align:center;margin-top:10px;font-size:16px;color:#FFD700">🔥 對準香頭點火中...</div>';
+      if (S.phase === 'inserting') page.innerHTML += '<div style="text-align:center;margin-top:10px;font-size:16px;color:#BBA86A">📌 將香插入香爐...</div>';
+      if (S.phase === 'done') page.innerHTML += '<div style="text-align:center;margin-top:12px"><div style="font-size:36px">🙏</div><div style="font-size:22px;font-weight:700;color:#FFD700;animation:glow 2s infinite">香已燒完，功德圓滿</div><div style="font-size:14px;color:#8B7D6B">' + (S.deity.id !== 'none' ? S.deity.name + ' 保佑平安' : '心誠則靈') + '</div></div>';
+
+      page.innerHTML += '<div style="margin-top:10px;padding:8px 14px;border-radius:7px;background:rgba(255,255,255,.03);font-size:12px;color:#777;text-align:center">' + S.brand.name + ' ・ ' + S.thick.name + ' ・ ' + S.len.name + ' ・ ' + S.count + '支 ・ 👥' + S.people + '人' + (S.offerings.length > 0 ? ' ・ 供品' + S.offerings.length + '項' : '') + (S.cups > 0 ? ' ・ ' + S.wine.name + S.cups + '杯' : '') + '</div>';
+
+      // Buttons
+      var btns = h('div', { style: { display: 'flex', gap: '10px', marginTop: '12px', marginBottom: '20px', flexWrap: 'wrap', justifyContent: 'center' } });
+      if (S.phase === 'burning') {
+        var jiaoBtn = h('button', { class: 'scene-btn', style: { border: '1px solid rgba(218,165,32,.35)', background: 'linear-gradient(135deg,rgba(218,165,32,.15),rgba(218,165,32,.08))', color: '#FFD700' }, onClick: showJiaobei }, '🥮 擲筊');
+        addClickEffect(jiaoBtn);
+        btns.appendChild(jiaoBtn);
+        btns.appendChild(h('button', { class: 'scene-btn', style: { border: '1px solid rgba(255,255,255,.1)', background: 'rgba(255,255,255,.04)', color: '#BBA86A' }, onClick: function () { S.showLeave = true; showLeaveDialog(); } }, '🚪 離開'));
+      }
+      if (S.phase === 'done' || S.phase === 'burning') {
+        btns.appendChild(h('button', { class: 'scene-btn', style: { border: '1px solid rgba(218,165,32,.25)', background: 'rgba(218,165,32,.1)', color: '#FFD700' }, onClick: resetAll }, '🔄 重新燒香'));
+      }
+      page.appendChild(btns);
+      app.appendChild(page);
+      if (S.phase === 'burning') startSmoke();
+    }
+
+    // Person SVG for bowing animation
+    function personHTML(idx) {
+      var delay = (idx * 0.15) + 's';
+      return '<div class="person-wrap"><div class="person-body" style="animation-delay:' + delay + '"><svg width="40" height="70" viewBox="0 0 40 70">' +
+        '<circle cx="20" cy="10" r="8" fill="#FFCC80"/>' +
+        '<rect x="12" y="18" width="16" height="28" rx="3" fill="#C0392B"/>' +
+        '<rect x="8" y="18" width="6" height="20" rx="2" fill="#C0392B" transform="rotate(-15 11 18)"/>' +
+        '<rect x="26" y="18" width="6" height="20" rx="2" fill="#C0392B" transform="rotate(15 29 18)"/>' +
+        '<line x1="14" y1="16" x2="14" y2="-8" stroke="' + S.brand.color + '" stroke-width="1.5"/>' +
+        '<line x1="26" y1="16" x2="26" y2="-8" stroke="' + S.brand.color + '" stroke-width="1.5"/>' +
+        '<rect x="14" y="46" width="5" height="20" rx="2" fill="#1A1A2E"/>' +
+        '<rect x="21" y="46" width="5" height="20" rx="2" fill="#1A1A2E"/>' +
+        '</svg></div></div>';
+    }
+
+    // ═══════════ ANIMATIONS ═══════════
+    function startBurn() {
+      S.elapsed = 0; S.wineFilled = false;
+      S.phase = 'lighting'; S.lighter = 'in';
+      render();
+      setTimeout(function () { S.lighter = 'lit'; render() }, 900);
+      setTimeout(function () { S.lighter = 'out'; render() }, 2800);
+      setTimeout(function () { S.lighter = null; S.phase = 'bowing'; render() }, 3400);
+      // After bowing animation (3s), insert sticks
+      setTimeout(function () { S.phase = 'inserting'; render() }, 6400);
+      setTimeout(function () {
+        if (S.cups > 0) { S.phase = 'pouring'; render(); }
+        else { S.phase = 'burning'; render(); startTimer(); }
+      }, 7300);
+    }
+
+    function animatePour(idx) {
+      if (idx >= S.cups) { S.wineFilled = true; S.phase = 'burning'; render(); startTimer(); return; }
+      var fills = document.querySelectorAll('.cup-fill');
+      if (fills[idx]) {
+        fills[idx].setAttribute('y', '6');
+        fills[idx].setAttribute('height', '10');
+        fills[idx].style.transition = 'all .4s ease-out';
+      }
+      setTimeout(function () { animatePour(idx + 1) }, 400);
+    }
+
+    function updateBurnUI() {
+      var rem = Math.max(0, totalTime() - S.elapsed);
+      var mm = String(Math.floor(rem / 60)).padStart(2, '0');
+      var ss = String(Math.floor(rem % 60)).padStart(2, '0');
+      var timerEl = document.getElementById('timer-display');
+      if (timerEl) timerEl.textContent = mm + ':' + ss;
+      var progEl = document.getElementById('burn-progress');
+      if (progEl) progEl.style.width = Math.round(burnPct() * 100) + '%';
+      var stickContainers = document.querySelectorAll('[data-stick]');
+      var bp = burnPct();
+      stickContainers.forEach(function (stick) {
+        var ht = S.len.h;
+        var burnedH = ht * bp;
+        var remainH = ht - burnedH;
+        var ashEl = stick.querySelector('[data-ash]');
+        var stickEl = stick.querySelector('[data-remain]');
+        if (ashEl) ashEl.style.height = burnedH + 'px';
+        if (stickEl) stickEl.style.height = Math.max(remainH, 0) + 'px';
+      });
+    }
+
+    function startTimer() {
+      if (timerIv) clearInterval(timerIv);
+      timerIv = setInterval(function () {
+        S.elapsed++;
+        if (S.elapsed >= totalTime()) {
+          clearInterval(timerIv); timerIv = null;
+          stopSmoke();
+          S.phase = 'done'; render();
+          return;
+        }
+        updateBurnUI();
+      }, 1000);
+    }
+
+    function startSmoke() {
+      if (smokeRaf) return;
+      var canvas = document.getElementById('smoke-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var spread = Math.min(260, S.count * 24 + 32);
+      var censerW = Math.max(170, spread + 50);
+      var censerH = Math.round(censerW * .45);
+      var stickH = S.len.h + 22;
+      var plantDepth = 32;
+      smokePs = [];
+      function getTips() {
+        var bp = burnPct();
+        var gap = spread / (S.count + 1);
+        var x0 = W / 2 - spread / 2;
+        var stickBottom = H - censerH + plantDepth;
+        var stickTop = stickBottom - stickH;
+        var tips = [];
+        for (var i = 0; i < S.count; i++) tips.push({ x: x0 + gap * (i + 1), y: Math.max(5, stickTop + S.len.h * bp) });
+        return tips;
+      }
+      var last = 0;
+      var rgb = S.brand.smoke;
+      function loop(ts) {
+        ctx.clearRect(0, 0, W, H);
+        var tips = getTips();
+        if (ts - last > 70) {
+          tips.forEach(function (t) {
+            smokePs.push({ x: t.x + (Math.random() - .5) * 3, y: t.y, vx: (Math.random() - .5) * .25, vy: -(0.15 + Math.random() * .3), r: 1.5 + Math.random() * 4, life: 1, d: .003 + Math.random() * .003, ws: .01 + Math.random() * .012, wa: .15 + Math.random() * .4, t: Math.random() * 6.28 });
+          });
+          last = ts;
+        }
+        for (var i = 0; i < smokePs.length; i++) {
+          var p = smokePs[i];
+          p.t += p.ws; p.x += p.vx + Math.sin(p.t) * p.wa; p.y += p.vy; p.r += .03; p.life -= p.d;
+        }
+        smokePs = smokePs.filter(function (p) { return p.life > 0 });
+        if (smokePs.length > 200) smokePs.splice(0, smokePs.length - 150);
+        for (var i = 0; i < smokePs.length; i++) {
+          var p = smokePs[i];
+          var a = p.life * .25;
+          var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+          g.addColorStop(0, 'rgba(' + rgb + ',' + a + ')');
+          g.addColorStop(1, 'rgba(' + rgb + ',0)');
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.28); ctx.fillStyle = g; ctx.fill();
+        }
+        smokeRaf = requestAnimationFrame(loop);
+      }
+      smokeRaf = requestAnimationFrame(loop);
+    }
+    function stopSmoke() { if (smokeRaf) { cancelAnimationFrame(smokeRaf); smokeRaf = null; } }
+
+    // ═══════════ JIAOBEI (筊杯) ═══════════
+    function showJiaobei() {
+      var overlay = h('div', { class: 'jiaobei-modal', id: 'jiaobei-overlay' });
+      var box = h('div', { class: 'jiaobei-box' });
+      box.innerHTML = '<div style="font-size:36px;margin-bottom:8px">🥮</div><div style="font-size:20px;font-weight:700;color:#FFD700;margin-bottom:12px">擲筊問事</div><div style="font-size:14px;color:#BBA86A;margin-bottom:12px">先輸入您的祈願，再擲筊問神明</div>';
+      var textarea = h('textarea', { id: 'jiao-text', style: { width: '100%', height: '80px', background: 'rgba(255,255,255,.06)', border: '1px solid rgba(218,165,32,.25)', borderRadius: '8px', color: '#E8DCC8', padding: '10px', fontSize: '15px', fontFamily: 'Noto Serif TC,serif', resize: 'none', outline: 'none' }, placeholder: '在此輸入您的祈願...' });
+      box.appendChild(textarea);
+      var btnRow = h('div', { style: { display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '14px' } });
+      var throwBtn = h('button', {
+        class: 'scene-btn', style: { border: '1px solid #DAA520', background: 'linear-gradient(135deg,#8B6914,#B8860B)', color: '#FFF', padding: '12px 28px', fontSize: '16px' }, onClick: function () {
+          var text = document.getElementById('jiao-text').value.trim();
+          if (!text) { textarea.style.borderColor = '#E74C3C'; return; }
+          doThrowJiaobei(text);
+        }
+      }, '🥮 擲筊');
+      addClickEffect(throwBtn);
+      btnRow.appendChild(throwBtn);
+      var closeBtn = h('button', { class: 'scene-btn', style: { border: '1px solid #555', background: 'rgba(255,255,255,.05)', color: '#ccc' }, onClick: function () { document.getElementById('jiaobei-overlay').remove(); } }, '❌ 關閉');
+      btnRow.appendChild(closeBtn);
+      box.appendChild(btnRow);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+    }
+
+    function doThrowJiaobei(text) {
+      var rand = Math.random();
+      var result, emoji, color, desc;
+      if (rand < 0.45) { result = '聖杯'; emoji = '🎉'; color = '#FFD700'; desc = '一正一反 — 神明同意！'; }
+      else if (rand < 0.72) { result = '笑杯'; emoji = '😄'; color = '#FF9800'; desc = '兩面朝上 — 神明笑而不答'; }
+      else { result = '陰杯'; emoji = '😔'; color = '#9E9E9E'; desc = '兩面朝下 — 神明不同意'; }
+
+      var overlay = document.getElementById('jiaobei-overlay');
+      if (!overlay) return;
+      var box = overlay.querySelector('.jiaobei-box');
+      box.innerHTML = '<div style="font-size:16px;color:#BBA86A;margin-bottom:8px">🙏 祈願：</div><div style="font-size:14px;color:#E8DCC8;margin-bottom:16px;padding:8px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(218,165,32,.1)">' + text + '</div>';
+
+      // Jiaobei area - using real photographic images
+      var animArea = h('div', { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', padding: '10px 0', flexWrap: 'wrap' } });
+
+      // Determine final orientation based on result
+      // 聖杯: one flat + one round, 笑杯: both flat (both yang up), 陰杯: both round (both yin up)
+      var isFlat1 = (result === '聖杯') ? true : (result === '笑杯') ? true : false;
+      var isFlat2 = (result === '聖杯') ? false : (result === '笑杯') ? true : false;
+
+      // Use real photo images for jiaobei
+      var img1 = isFlat1 ? 'images/jiaobei_flat.png' : 'images/jiaobei_round.png';
+      var img2 = isFlat2 ? 'images/jiaobei_flat.png' : 'images/jiaobei_round.png';
+      var lbl1 = isFlat1 ? '陽面（平）' : '陰面（凸）';
+      var lbl2 = isFlat2 ? '陽面（平）' : '陰面（凸）';
+
+      var piece1 = '<div style="display:inline-flex;flex-direction:column;align-items:center;animation:jiaobeiFall1 1s cubic-bezier(.25,.46,.45,.94) forwards;--final-rot1:0deg">' +
+        '<img src="' + img1 + '" style="width:120px;height:120px;object-fit:contain;transform:rotate(-8deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))">' +
+        '<div style="font-size:12px;color:#BBA86A;margin-top:4px">' + lbl1 + '</div></div>';
+      var piece2 = '<div style="display:inline-flex;flex-direction:column;align-items:center;animation:jiaobeiFall2 1s cubic-bezier(.25,.46,.45,.94) forwards;--final-rot2:0deg">' +
+        '<img src="' + img2 + '" style="width:120px;height:120px;object-fit:contain;transform:rotate(8deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))">' +
+        '<div style="font-size:12px;color:#BBA86A;margin-top:4px">' + lbl2 + '</div></div>';
+      animArea.innerHTML = piece1 + piece2;
+      box.appendChild(animArea);
+
+      // Show result after animation
+      setTimeout(function () {
+        var resultDiv = h('div', { style: { textAlign: 'center', animation: 'fadeIn .4s ease', marginTop: '8px' } });
+        resultDiv.innerHTML = '<div style="font-size:32px">' + emoji + '</div><div style="font-size:24px;font-weight:900;color:' + color + ';margin:2px 0">' + result + '</div><div style="font-size:14px;color:#BBA86A">' + desc + '</div>';
+        box.appendChild(resultDiv);
+
+        var btnRow2 = h('div', { style: { display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '14px' } });
+        var againBtn = h('button', { class: 'scene-btn', style: { border: '1px solid #DAA520', background: 'linear-gradient(135deg,#8B6914,#B8860B)', color: '#FFF' }, onClick: function () { document.getElementById('jiaobei-overlay').remove(); showJiaobei(); } }, '🔄 再擲一次');
+        addClickEffect(againBtn);
+        btnRow2.appendChild(againBtn);
+        var doneBtn = h('button', { class: 'scene-btn', style: { border: '1px solid #555', background: 'rgba(255,255,255,.05)', color: '#ccc' }, onClick: function () { document.getElementById('jiaobei-overlay').remove(); } }, '✅ 完成');
+        btnRow2.appendChild(doneBtn);
+        box.appendChild(btnRow2);
+      }, 1400);
+    }
+
+    function showLeaveDialog() {
+      var overlay = h('div', { id: 'leave-overlay', style: { position: 'fixed', inset: '0', background: 'rgba(0,0,0,.7)', zIndex: '1000', display: 'flex', alignItems: 'center', justifyContent: 'center' } });
+      var box = h('div', { style: { background: 'linear-gradient(135deg,#1A1A2E,#16213E)', border: '1px solid rgba(218,165,32,.25)', borderRadius: '14px', padding: '28px 32px', textAlign: 'center', maxWidth: '360px', width: '90%' } });
+      box.innerHTML = '<div style="font-size:36px">🙏</div><div style="font-size:18px;font-weight:700;color:#FFD700;margin-top:4px">香尚未燒完</div><div style="font-size:15px;color:#ccc;margin-bottom:18px;line-height:1.5">繼續燃燒或結束？</div>';
+      var btns = h('div', { style: { display: 'flex', gap: '10px', justifyContent: 'center' } });
+      btns.appendChild(h('button', { class: 'scene-btn', style: { border: '1px solid #DAA520', background: 'linear-gradient(135deg,#8B6914,#B8860B)', color: '#FFF' }, onClick: function () { document.getElementById('leave-overlay').remove(); } }, '🔥 繼續'));
+      btns.appendChild(h('button', { class: 'scene-btn', style: { border: '1px solid #555', background: 'rgba(255,255,255,.05)', color: '#ccc' }, onClick: function () { document.getElementById('leave-overlay').remove(); resetAll(); } }, '🕯️ 結束'));
+      box.appendChild(btns);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+    }
+
+    function resetAll() {
+      if (timerIv) { clearInterval(timerIv); timerIv = null; }
+      stopSmoke();
+      S.phase = 'setup'; S.elapsed = 0; S.lighter = null; S.wineFilled = false; S.jiaoResult = null;
+      render();
+    }
+
+    // ═══════════ INIT ═══════════
+    render();
+  </script>
+</body>
+
+</html>
