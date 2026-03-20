@@ -384,15 +384,15 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      width: 68px
+      width: 90px
     }
 
     .ad-card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
-      padding: 8px 4px;
+      gap: 4px;
+      padding: 6px 4px;
       background: rgba(26, 26, 46, .92);
       border: 1px solid rgba(218, 165, 32, .2);
       border-radius: 10px;
@@ -410,18 +410,20 @@
       box-shadow: 0 4px 18px rgba(218, 165, 32, .2)
     }
 
-    .ad-card .ad-icon {
-      font-size: 26px;
-      line-height: 1
+    .ad-card .ad-img {
+      width: 72px;
+      height: 54px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid rgba(218, 165, 32, .15)
     }
 
     .ad-card .ad-name {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 600;
       color: #DAA520;
       text-align: center;
-      line-height: 1.2;
-      word-break: break-all
+      line-height: 1.2
     }
 
     .ad-card .ad-src {
@@ -434,21 +436,23 @@
 
     @media(max-width:480px) {
       .ad-sidebar {
-        right: 6px;
+        right: 4px;
         top: auto;
-        bottom: 12px;
+        bottom: 10px;
         transform: none;
-        width: 52px;
+        width: 64px;
         gap: 5px
       }
 
       .ad-card {
-        padding: 6px 3px;
+        padding: 4px 3px;
         border-radius: 8px
       }
 
-      .ad-card .ad-icon {
-        font-size: 20px
+      .ad-card .ad-img {
+        width: 52px;
+        height: 40px;
+        border-radius: 5px
       }
 
       .ad-card .ad-name {
@@ -769,18 +773,19 @@
       { id: "tea", name: "清茶", color: "rgba(180,210,140,.6)" }, { id: "soda", name: "汽水", color: "rgba(255,200,100,.5)" },
     ];
     const ADS = [
-      { name: "明星3缺1", icon: "🀄", src: "gametower", url: "https://www.gametower.com.tw/Games/FreePlay/Mj/star31/?utm_source=kentarry&utm_medium=banner1&utm_campaign=0313promotion" },
-      { name: "滿貫大亨", icon: "🎰", src: "gametower", url: "https://www.gametower.com.tw/Games/TMD/?utm_source=kentarry&utm_medium=banner2&utm_campaign=0313promotion" },
-      { name: "台灣AI新聞", icon: "📰", src: "twainews", url: "https://www.twainews.com.tw/3325835069235672403720855" },
-      { name: "多功能工具箱", icon: "🧰", src: "kentarry", url: "https://kentarry.github.io/100-tools-box/" },
-    ];
+      { name: "明星3缺1", img: "advertise/advertise1.jpeg", src: "gametower", url: "https://www.gametower.com.tw/Games/FreePlay/Mj/star31/?utm_source=kentarry&utm_medium=banner1&utm_campaign=0313promotion" },
+      { name: "滿貫大亨", img: "advertise/advertise2.jpeg", src: "gametower", url: "https://www.gametower.com.tw/Games/TMD/?utm_source=kentarry&utm_medium=banner2&utm_campaign=0313promotion" },
+      { name: "多功能工具箱", img: "advertise/advertise3.jpeg", src: "kentarry", url: "https://kentarry.github.io/100-tools-box/" },
+      { name: "台灣AI新聞", img: "advertise/advertise4.jpg", src: "twainews", url: "https://www.twainews.com.tw/3325835069235672403720855" },];
     function renderAdSidebar() {
       var existing = document.getElementById('ad-sidebar');
       if (existing) return; // already rendered
       var sidebar = h('div', { class: 'ad-sidebar', id: 'ad-sidebar' });
       ADS.forEach(function (ad) {
         var card = h('a', { class: 'ad-card', href: ad.url, target: '_blank', rel: 'noopener' });
-        card.innerHTML = '<div class="ad-icon">' + ad.icon + '</div><div class="ad-name">' + ad.name + '</div><div class="ad-src">' + ad.src + '</div>';
+        card.innerHTML = '<img class="ad-img" src="' + ad.img + '" alt="' + ad.name + '">' +
+          '<div class="ad-name">' + ad.name + '</div>' +
+          '<div class="ad-src">' + ad.src + '</div>';
         sidebar.appendChild(card);
       });
       document.body.appendChild(sidebar);
@@ -844,6 +849,7 @@
     }
     function render() {
       var app = document.getElementById('app');
+      stopSmoke();
       app.innerHTML = '';
       if (S.phase === 'setup') renderSetup(app);
       else renderScene(app);
@@ -1359,10 +1365,10 @@
       var overlay = document.getElementById('jiaobei-overlay');
       if (!overlay) return;
       var box = overlay.querySelector('.jiaobei-box');
-      box.innerHTML = '<div style="font-size:16px;color:#BBA86A;margin-bottom:8px">🙏 祈願：</div><div style="font-size:14px;color:#E8DCC8;margin-bottom:16px;padding:8px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(218,165,32,.1)">' + text + '</div>';
+      box.innerHTML = '<div style="font-size:16px;color:#BBA86A;margin-bottom:8px">🙏 祈願：</div><div style="font-size:14px;color:#E8DCC8;margin-bottom:8px;padding:8px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(218,165,32,.1)">' + text + '</div>';
 
-      // Jiaobei area - using real photographic images, height constrained to reduce empty space
-      var animArea = h('div', { style: { display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: '16px', padding: '0', height: '160px', overflow: 'visible', flexWrap: 'wrap' } });
+      // Jiaobei area - using real photographic images
+      var animArea = h('div', { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', padding: '10px 0', flexWrap: 'wrap' } });
 
       // Determine final orientation based on result
       // 聖杯: one flat + one round, 笑杯: both flat (both yang up), 陰杯: both round (both yin up)
