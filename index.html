@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 
 <head>
@@ -530,8 +530,11 @@
       }
     }
 
-    #setup-page,
-    #scene-page {
+    #setup-page {
+      animation: fadeIn .4s ease-out
+    }
+
+    #scene-page.scene-enter {
       animation: fadeIn .4s ease-out
     }
 
@@ -707,7 +710,7 @@
 
     // ═══════════ STATE ═══════════
     var S = {
-      phase: "setup", tab: "deity", oCat: 0,
+      phase: "setup", prevPhase: "setup", tab: "deity", oCat: 0,
       deity: DEITIES[0], brand: BRANDS[0], thick: THICKS[1], len: LENS[1],
       count: 3, censer: CENSERS[0], people: 1,
       offerings: [], gP: [], sP: [], cups: 3, chops: 3, wine: WINES[0],
@@ -745,9 +748,30 @@
     }
     function render() {
       var app = document.getElementById('app');
+      var isSetup = S.phase === 'setup';
+      var wasSetup = S.prevPhase === 'setup';
+      var enteringScene = !isSetup && wasSetup;
+
+      // Build new content off-screen to avoid flicker
+      var tempContainer = document.createElement('div');
+      if (isSetup) {
+        renderSetup(tempContainer);
+      } else {
+        renderScene(tempContainer);
+        // Only add entrance animation when first entering scene from setup
+        if (enteringScene) {
+          var scenePage = tempContainer.querySelector('#scene-page');
+          if (scenePage) scenePage.classList.add('scene-enter');
+        }
+      }
+
+      // Swap content
       app.innerHTML = '';
-      if (S.phase === 'setup') renderSetup(app);
-      else renderScene(app);
+      while (tempContainer.firstChild) {
+        app.appendChild(tempContainer.firstChild);
+      }
+
+      S.prevPhase = S.phase;
     }
 
     // ═══════════ SETUP PAGE ═══════════
@@ -1116,8 +1140,22 @@
       S.elapsed = 0; S.wineFilled = false;
       S.phase = 'lighting'; S.lighter = 'in';
       render();
-      setTimeout(function () { S.lighter = 'lit'; render() }, 900);
-      setTimeout(function () { S.lighter = 'out'; render() }, 2800);
+      // Use targeted DOM updates for lighter animation to avoid full re-renders
+      setTimeout(function () {
+        S.lighter = 'lit';
+        // Just update lighter element, no full re-render needed
+        var lighterEl = document.getElementById('lighter');
+        if (lighterEl) {
+          lighterEl.style.animation = 'none';
+        }
+      }, 900);
+      setTimeout(function () {
+        S.lighter = 'out';
+        var lighterEl = document.getElementById('lighter');
+        if (lighterEl) {
+          lighterEl.style.animation = 'lighterOut .6s ease-in forwards';
+        }
+      }, 2800);
       setTimeout(function () { S.lighter = null; S.phase = 'bowing'; render() }, 3400);
       // After bowing animation (3s), insert sticks
       setTimeout(function () { S.phase = 'inserting'; render() }, 6400);
@@ -1316,7 +1354,7 @@
     function resetAll() {
       if (timerIv) { clearInterval(timerIv); timerIv = null; }
       stopSmoke();
-      S.phase = 'setup'; S.elapsed = 0; S.lighter = null; S.wineFilled = false; S.jiaoResult = null;
+      S.phase = 'setup'; S.prevPhase = 'setup'; S.elapsed = 0; S.lighter = null; S.wineFilled = false; S.jiaoResult = null;
       render();
     }
 
