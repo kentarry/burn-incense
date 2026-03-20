@@ -314,19 +314,19 @@
       }
 
       40% {
-        transform: translateY(40px) rotateX(720deg)
+        transform: translateY(20px) rotateX(720deg)
       }
 
       60% {
-        transform: translateY(60px) rotateX(800deg)
+        transform: translateY(30px) rotateX(800deg)
       }
 
       80% {
-        transform: translateY(75px) rotateX(850deg)
+        transform: translateY(38px) rotateX(850deg)
       }
 
       100% {
-        transform: translateY(80px) rotateX(var(--final-rot1))
+        transform: translateY(40px) rotateX(var(--final-rot1))
       }
     }
 
@@ -336,19 +336,19 @@
       }
 
       45% {
-        transform: translateY(80px) rotateX(540deg)
+        transform: translateY(40px) rotateX(540deg)
       }
 
       65% {
-        transform: translateY(55px) rotateX(650deg)
+        transform: translateY(28px) rotateX(650deg)
       }
 
       85% {
-        transform: translateY(78px) rotateX(700deg)
+        transform: translateY(38px) rotateX(700deg)
       }
 
       100% {
-        transform: translateY(80px) rotateX(var(--final-rot2))
+        transform: translateY(40px) rotateX(var(--final-rot2))
       }
     }
 
@@ -366,9 +366,9 @@
       background: linear-gradient(135deg, #1A1A2E, #16213E);
       border: 1px solid rgba(218, 165, 32, .3);
       border-radius: 16px;
-      padding: 24px;
+      padding: 32px 28px;
       text-align: center;
-      max-width: 420px;
+      max-width: 460px;
       width: 92%;
       max-height: 90vh;
       overflow-y: auto
@@ -383,16 +383,16 @@
       z-index: 500;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      width: 90px
+      gap: 10px;
+      width: 140px
     }
 
     .ad-card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      padding: 6px 4px;
+      gap: 6px;
+      padding: 8px 6px;
       background: rgba(26, 26, 46, .92);
       border: 1px solid rgba(218, 165, 32, .2);
       border-radius: 10px;
@@ -411,27 +411,29 @@
     }
 
     .ad-card .ad-img {
-      width: 72px;
-      height: 54px;
+      width: 120px;
+      height: 90px;
       border-radius: 6px;
       object-fit: cover;
       border: 1px solid rgba(218, 165, 32, .15)
     }
 
     .ad-card .ad-name {
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 600;
       color: #DAA520;
       text-align: center;
-      line-height: 1.2
+      line-height: 1.3
     }
 
     .ad-card .ad-src {
-      font-size: 7px;
-      color: #666;
-      background: rgba(255, 255, 255, .05);
-      padding: 1px 4px;
-      border-radius: 3px
+      font-size: 10px;
+      color: #999;
+      background: rgba(255, 255, 255, .08);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+      letter-spacing: .5px
     }
 
     @media(max-width:480px) {
@@ -440,22 +442,26 @@
         top: auto;
         bottom: 10px;
         transform: none;
-        width: 64px;
-        gap: 5px
+        width: 90px;
+        gap: 6px
       }
 
       .ad-card {
-        padding: 4px 3px;
+        padding: 5px 4px;
         border-radius: 8px
       }
 
       .ad-card .ad-img {
-        width: 52px;
-        height: 40px;
+        width: 76px;
+        height: 56px;
         border-radius: 5px
       }
 
       .ad-card .ad-name {
+        font-size: 10px
+      }
+
+      .ad-card .ad-src {
         font-size: 8px
       }
     }
@@ -783,9 +789,9 @@
       var sidebar = h('div', { class: 'ad-sidebar', id: 'ad-sidebar' });
       ADS.forEach(function (ad) {
         var card = h('a', { class: 'ad-card', href: ad.url, target: '_blank', rel: 'noopener' });
-        card.innerHTML = '<img class="ad-img" src="' + ad.img + '" alt="' + ad.name + '">' +
-          '<div class="ad-name">' + ad.name + '</div>' +
-          '<div class="ad-src">' + ad.src + '</div>';
+        card.innerHTML = '<div class="ad-src">' + ad.src + '</div>' +
+          '<img class="ad-img" src="' + ad.img + '" alt="' + ad.name + '">' +
+          '<div class="ad-name">' + ad.name + '</div>';
         sidebar.appendChild(card);
       });
       document.body.appendChild(sidebar);
@@ -850,9 +856,15 @@
     function render() {
       var app = document.getElementById('app');
       stopSmoke();
-      app.innerHTML = '';
-      if (S.phase === 'setup') renderSetup(app);
-      else renderScene(app);
+      // Build new content off-screen to avoid blank-frame flicker
+      var frag = document.createDocumentFragment();
+      var tempContainer = h('div');
+      if (S.phase === 'setup') renderSetup(tempContainer);
+      else renderScene(tempContainer);
+      while (tempContainer.firstChild) frag.appendChild(tempContainer.firstChild);
+      app.replaceChildren(frag);
+      // Re-start smoke after DOM is swapped in
+      if (S.phase === 'burning') startSmoke();
     }
 
     // ═══════════ SETUP PAGE ═══════════
@@ -1075,7 +1087,7 @@
       var scene = h('div', { style: { position: 'relative', width: sceneW + 'px', maxWidth: '100%', height: sceneH + 'px' } });
 
       // Smoke canvas
-      var canvas = h('canvas', { id: 'smoke-canvas', width: Math.round(sceneW), height: sceneH, style: { position: 'absolute', top: '0', left: '0', pointerEvents: 'none', zIndex: '15' } });
+      var canvas = h('canvas', { id: 'smoke-canvas', width: Math.round(sceneW), height: sceneH, style: { position: 'absolute', top: '0', left: '0', pointerEvents: 'none', zIndex: '20' } });
       scene.appendChild(canvas);
 
       // Incense sticks in censer
@@ -1198,7 +1210,6 @@
       }
       page.appendChild(btns);
       app.appendChild(page);
-      if (S.phase === 'burning') startSmoke();
     }
 
     // Person SVG for bowing animation
@@ -1368,7 +1379,7 @@
       box.innerHTML = '<div style="font-size:16px;color:#BBA86A;margin-bottom:8px">🙏 祈願：</div><div style="font-size:14px;color:#E8DCC8;margin-bottom:8px;padding:8px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(218,165,32,.1)">' + text + '</div>';
 
       // Jiaobei area - using real photographic images
-      var animArea = h('div', { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', padding: '10px 0', flexWrap: 'wrap' } });
+      var animArea = h('div', { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', padding: '20px 0 16px', minHeight: '180px', flexWrap: 'wrap' } });
 
       // Determine final orientation based on result
       // 聖杯: one flat + one round, 笑杯: both flat (both yang up), 陰杯: both round (both yin up)
@@ -1392,11 +1403,11 @@
 
       // Show result after animation
       setTimeout(function () {
-        var resultDiv = h('div', { style: { textAlign: 'center', animation: 'fadeIn .4s ease', marginTop: '8px' } });
-        resultDiv.innerHTML = '<div style="font-size:32px">' + emoji + '</div><div style="font-size:24px;font-weight:900;color:' + color + ';margin:2px 0">' + result + '</div><div style="font-size:14px;color:#BBA86A">' + desc + '</div>';
+        var resultDiv = h('div', { style: { textAlign: 'center', animation: 'fadeIn .4s ease', marginTop: '18px', padding: '14px 10px', background: 'rgba(255,255,255,.03)', borderRadius: '10px', border: '1px solid rgba(218,165,32,.12)' } });
+        resultDiv.innerHTML = '<div style="font-size:36px;margin-bottom:6px">' + emoji + '</div><div style="font-size:26px;font-weight:900;color:' + color + ';margin:6px 0">' + result + '</div><div style="font-size:15px;color:#BBA86A;line-height:1.5">' + desc + '</div>';
         box.appendChild(resultDiv);
 
-        var btnRow2 = h('div', { style: { display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '14px' } });
+        var btnRow2 = h('div', { style: { display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '20px' } });
         var againBtn = h('button', { class: 'scene-btn', style: { border: '1px solid #DAA520', background: 'linear-gradient(135deg,#8B6914,#B8860B)', color: '#FFF' }, onClick: function () { document.getElementById('jiaobei-overlay').remove(); showJiaobei(); } }, '🔄 再擲一次');
         addClickEffect(againBtn);
         btnRow2.appendChild(againBtn);
