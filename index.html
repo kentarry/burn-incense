@@ -314,19 +314,19 @@
       }
 
       40% {
-        transform: translateY(80px) rotateX(720deg)
+        transform: translateY(40px) rotateX(720deg)
       }
 
       60% {
-        transform: translateY(60px) rotateX(800deg)
+        transform: translateY(25px) rotateX(800deg)
       }
 
       80% {
-        transform: translateY(75px) rotateX(850deg)
+        transform: translateY(38px) rotateX(850deg)
       }
 
       100% {
-        transform: translateY(80px) rotateX(var(--final-rot1))
+        transform: translateY(40px) rotateX(var(--final-rot1))
       }
     }
 
@@ -336,19 +336,19 @@
       }
 
       45% {
-        transform: translateY(80px) rotateX(540deg)
+        transform: translateY(40px) rotateX(540deg)
       }
 
       65% {
-        transform: translateY(55px) rotateX(650deg)
+        transform: translateY(22px) rotateX(650deg)
       }
 
       85% {
-        transform: translateY(78px) rotateX(700deg)
+        transform: translateY(38px) rotateX(700deg)
       }
 
       100% {
-        transform: translateY(80px) rotateX(var(--final-rot2))
+        transform: translateY(40px) rotateX(var(--final-rot2))
       }
     }
 
@@ -366,12 +366,82 @@
       background: linear-gradient(135deg, #1A1A2E, #16213E);
       border: 1px solid rgba(218, 165, 32, .3);
       border-radius: 16px;
-      padding: 24px;
+      padding: 18px 20px;
       text-align: center;
       max-width: 420px;
       width: 92%;
       max-height: 90vh;
       overflow-y: auto
+    }
+
+    /* Ad banner */
+    .ad-banner {
+      width: 100%;
+      max-width: 480px;
+      margin: 14px auto 8px;
+      background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(218,165,32,.06));
+      border: 1px solid rgba(218,165,32,.15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #E8DCC8;
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden
+    }
+
+    .ad-banner:hover {
+      background: rgba(218,165,32,.1);
+      border-color: rgba(218,165,32,.3);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(218,165,32,.15)
+    }
+
+    .ad-banner .ad-icon {
+      font-size: 28px;
+      flex-shrink: 0
+    }
+
+    .ad-banner .ad-body {
+      flex: 1;
+      min-width: 0
+    }
+
+    .ad-banner .ad-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFD700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .ad-banner .ad-desc {
+      font-size: 11px;
+      color: #8B7D6B;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .ad-banner .ad-tag {
+      font-size: 9px;
+      color: #666;
+      background: rgba(255,255,255,.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      flex-shrink: 0
+    }
+
+    .ad-banner .ad-go {
+      font-size: 14px;
+      color: #DAA520;
+      flex-shrink: 0
     }
 
     .jiaobei-piece {
@@ -689,6 +759,42 @@
       { id: "rice", name: "米酒", color: "rgba(255,255,240,.7)" }, { id: "kaoliang", name: "高粱酒", color: "rgba(255,255,245,.75)" },
       { id: "tea", name: "清茶", color: "rgba(180,210,140,.6)" }, { id: "soda", name: "汽水", color: "rgba(255,200,100,.5)" },
     ];
+    const ADS = [
+      { name: "明星3缺1", icon: "🀄", desc: "經典麻將遊戲，立即免費暢玩！", url: "https://www.gametower.com.tw/Games/FreePlay/Mj/star31/?utm_source=kentarry&utm_medium=banner1&utm_campaign=0313promotion" },
+      { name: "滿貫大亨", icon: "🎰", desc: "刺激老虎機，天天送大獎！", url: "https://www.gametower.com.tw/Games/TMD/?utm_source=kentarry&utm_medium=banner2&utm_campaign=0313promotion" },
+      { name: "台灣AI新聞", icon: "📰", desc: "AI 彙整即時新聞，掌握台灣大小事", url: "https://www.twainews.com.tw/3325835069235672403720855" },
+      { name: "多功能工具箱", icon: "🧰", desc: "100+ 免費線上工具，開發生活一站搞定", url: "https://kentarry.github.io/100-tools-box/" },
+    ];
+    var adIdx = Math.floor(Math.random() * ADS.length);
+    var adTimer = null;
+    function startAdRotation() {
+      if (adTimer) return;
+      adTimer = setInterval(function () {
+        adIdx = (adIdx + 1) % ADS.length;
+        var els = document.querySelectorAll('.ad-banner');
+        els.forEach(function (el) {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(6px)';
+          setTimeout(function () {
+            var ad = ADS[adIdx];
+            el.href = ad.url;
+            el.querySelector('.ad-icon').textContent = ad.icon;
+            el.querySelector('.ad-title').textContent = ad.name;
+            el.querySelector('.ad-desc').textContent = ad.desc;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          }, 280);
+        });
+      }, 5000);
+    }
+    function adBannerHTML() {
+      var ad = ADS[adIdx];
+      return '<a class="ad-banner" href="' + ad.url + '" target="_blank" rel="noopener">' +
+        '<div class="ad-icon">' + ad.icon + '</div>' +
+        '<div class="ad-body"><div class="ad-title">' + ad.name + '</div><div class="ad-desc">' + ad.desc + '</div></div>' +
+        '<div class="ad-tag">AD</div>' +
+        '<div class="ad-go">›</div></a>';
+    }
     const FOOD_EMOJI = {
       "蘋果": "🍎", "橘子": "🍊", "香蕉": "🍌", "鳳梨": "🍍", "葡萄": "🍇", "西瓜": "🍉", "芒果": "🥭", "柚子": "🍈", "水梨": "🍐", "荔枝": "🍒", "龍眼": "🫐", "火龍果": "🐉", "蓮霧": "🍑", "柿子": "🟠", "楊桃": "⭐", "棗子": "🫒", "芭樂": "🍏", "木瓜": "🍈",
       "全雞": "🐔", "全鴨": "🦆", "全魚": "🐟", "豬肉": "🥩", "豬腳": "🦵", "滷蛋": "🥚", "燒肉": "🥓", "五花肉": "🥩", "魷魚": "🦑", "蝦": "🦐",
@@ -946,8 +1052,11 @@
       cont.appendChild(sumDiv);
       var startBtn = h('button', { class: 'start-btn', onClick: startBurn }, '🔥 點香開始');
       cont.appendChild(startBtn);
+      // Ad banner
+      cont.innerHTML += adBannerHTML();
       page.appendChild(cont);
       app.appendChild(page);
+      startAdRotation();
     }
 
     // ═══════════ SCENE PAGE ═══════════
@@ -1116,8 +1225,11 @@
         btns.appendChild(h('button', { class: 'scene-btn', style: { border: '1px solid rgba(218,165,32,.25)', background: 'rgba(218,165,32,.1)', color: '#FFD700' }, onClick: resetAll }, '🔄 重新燒香'));
       }
       page.appendChild(btns);
+      // Ad banner in scene
+      page.innerHTML += adBannerHTML();
       app.appendChild(page);
       if (S.phase === 'burning') startSmoke();
+      startAdRotation();
     }
 
     // Person SVG for bowing animation
@@ -1298,10 +1410,10 @@
       var overlay = document.getElementById('jiaobei-overlay');
       if (!overlay) return;
       var box = overlay.querySelector('.jiaobei-box');
-      box.innerHTML = '<div style="font-size:16px;color:#BBA86A;margin-bottom:8px">🙏 祈願：</div><div style="font-size:14px;color:#E8DCC8;margin-bottom:16px;padding:8px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(218,165,32,.1)">' + text + '</div>';
+      box.innerHTML = '<div style="font-size:14px;color:#BBA86A;margin-bottom:4px">🙏 祈願：</div><div style="font-size:13px;color:#E8DCC8;margin-bottom:10px;padding:6px 8px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(218,165,32,.1)">' + text + '</div>';
 
       // Jiaobei area - using real photographic images
-      var animArea = h('div', { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', padding: '10px 0', flexWrap: 'wrap' } });
+      var animArea = h('div', { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', padding: '4px 0', flexWrap: 'wrap' } });
 
       // Determine final orientation based on result
       // 聖杯: one flat + one round, 笑杯: both flat (both yang up), 陰杯: both round (both yin up)
@@ -1315,18 +1427,18 @@
       var lbl2 = isFlat2 ? '陽面（平）' : '陰面（凸）';
 
       var piece1 = '<div style="display:inline-flex;flex-direction:column;align-items:center;animation:jiaobeiFall1 1s cubic-bezier(.25,.46,.45,.94) forwards;--final-rot1:0deg">' +
-        '<img src="' + img1 + '" style="width:120px;height:120px;object-fit:contain;transform:rotate(-8deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))">' +
-        '<div style="font-size:12px;color:#BBA86A;margin-top:4px">' + lbl1 + '</div></div>';
+        '<img src="' + img1 + '" style="width:90px;height:90px;object-fit:contain;transform:rotate(-8deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))">' +
+        '<div style="font-size:11px;color:#BBA86A;margin-top:2px">' + lbl1 + '</div></div>';
       var piece2 = '<div style="display:inline-flex;flex-direction:column;align-items:center;animation:jiaobeiFall2 1s cubic-bezier(.25,.46,.45,.94) forwards;--final-rot2:0deg">' +
-        '<img src="' + img2 + '" style="width:120px;height:120px;object-fit:contain;transform:rotate(8deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))">' +
-        '<div style="font-size:12px;color:#BBA86A;margin-top:4px">' + lbl2 + '</div></div>';
+        '<img src="' + img2 + '" style="width:90px;height:90px;object-fit:contain;transform:rotate(8deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))">' +
+        '<div style="font-size:11px;color:#BBA86A;margin-top:2px">' + lbl2 + '</div></div>';
       animArea.innerHTML = piece1 + piece2;
       box.appendChild(animArea);
 
       // Show result after animation
       setTimeout(function () {
-        var resultDiv = h('div', { style: { textAlign: 'center', animation: 'fadeIn .4s ease', marginTop: '8px' } });
-        resultDiv.innerHTML = '<div style="font-size:32px">' + emoji + '</div><div style="font-size:24px;font-weight:900;color:' + color + ';margin:2px 0">' + result + '</div><div style="font-size:14px;color:#BBA86A">' + desc + '</div>';
+        var resultDiv = h('div', { style: { textAlign: 'center', animation: 'fadeIn .4s ease', marginTop: '4px' } });
+        resultDiv.innerHTML = '<div style="font-size:26px">' + emoji + '</div><div style="font-size:22px;font-weight:900;color:' + color + ';margin:2px 0">' + result + '</div><div style="font-size:13px;color:#BBA86A">' + desc + '</div>';
         box.appendChild(resultDiv);
 
         var btnRow2 = h('div', { style: { display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '14px' } });
