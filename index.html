@@ -374,95 +374,217 @@
       overflow-y: auto
     }
 
-    /* Floating ad sidebar */
-    .ad-sidebar {
+    /* ── Bottom Ad Banner ── */
+    .ad-banner-wrap {
       position: fixed;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
+      bottom: 0;
+      left: 0;
+      right: 0;
       z-index: 500;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 140px
+      background: linear-gradient(180deg, rgba(13,13,26,.0) 0%, rgba(13,13,26,.95) 30%, rgba(13,13,26,.98) 100%);
+      padding: 6px 0 8px;
+      transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .35s ease;
     }
 
-    .ad-card {
+    .ad-banner-wrap.hidden {
+      transform: translateY(100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ad-banner-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid rgba(218,165,32,.25);
+      background: rgba(26,26,46,.92);
+      backdrop-filter: blur(8px);
+    }
+
+    .ad-banner-close {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      z-index: 10;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.55);
+      color: #ccc;
+      font-size: 14px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 8px 6px;
-      background: rgba(26, 26, 46, .92);
-      border: 1px solid rgba(218, 165, 32, .2);
-      border-radius: 10px;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      transition: all .2s ease;
+      line-height: 1;
+    }
+
+    .ad-banner-close:hover {
+      background: rgba(218,165,32,.4);
+      color: #fff;
+    }
+
+    .ad-banner-track {
+      display: flex;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+
+    .ad-banner-card {
+      min-width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
       text-decoration: none;
       color: #E8DCC8;
-      transition: all .25s ease;
-      backdrop-filter: blur(6px);
-      cursor: pointer
+      cursor: pointer;
     }
 
-    .ad-card:hover {
-      background: rgba(218, 165, 32, .18);
-      border-color: rgba(218, 165, 32, .5);
-      transform: scale(1.06);
-      box-shadow: 0 4px 18px rgba(218, 165, 32, .2)
-    }
-
-    .ad-card .ad-img {
-      width: 120px;
-      height: 90px;
-      border-radius: 6px;
+    .ad-banner-card .ab-img {
+      width: 72px;
+      height: 54px;
+      border-radius: 8px;
       object-fit: cover;
-      border: 1px solid rgba(218, 165, 32, .15)
+      border: 1px solid rgba(218,165,32,.2);
+      flex-shrink: 0;
     }
 
-    .ad-card .ad-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: #DAA520;
-      text-align: center;
-      line-height: 1.3
+    .ad-banner-card .ab-info {
+      flex: 1;
+      min-width: 0;
     }
 
-    .ad-card .ad-src {
+    .ad-banner-card .ab-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFD700;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ad-banner-card .ab-src {
       font-size: 10px;
       color: #999;
-      background: rgba(255, 255, 255, .08);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-weight: 500;
-      letter-spacing: .5px
+      margin-bottom: 6px;
+    }
+
+    .ad-banner-card .ab-cta {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #DAA520, #B8860B);
+      box-shadow: 0 0 0 0 rgba(218,165,32,.4);
+      animation: adPulse 2.2s ease-in-out infinite;
+      transition: transform .15s ease;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .ad-banner-card .ab-cta:hover {
+      transform: scale(1.06);
+    }
+
+    @keyframes adPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(218,165,32,.45); }
+      70%  { box-shadow: 0 0 0 8px rgba(218,165,32,0); }
+      100% { box-shadow: 0 0 0 0 rgba(218,165,32,0); }
+    }
+
+    .ad-banner-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      padding: 5px 0 2px;
+    }
+
+    .ad-banner-dots .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+
+    .ad-banner-dots .dot.active {
+      background: #DAA520;
+      box-shadow: 0 0 6px rgba(218,165,32,.5);
+      transform: scale(1.3);
+    }
+
+    /* Floating reopen tab */
+    .ad-reopen-tab {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      z-index: 499;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: rgba(26,26,46,.88);
+      border: 1px solid rgba(218,165,32,.3);
+      color: #DAA520;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: all .25s ease;
+      display: none;
+    }
+
+    .ad-reopen-tab.show {
+      display: block;
+      animation: fadeIn .35s ease-out;
+    }
+
+    .ad-reopen-tab:hover {
+      background: rgba(218,165,32,.18);
+      border-color: rgba(218,165,32,.5);
+      transform: scale(1.05);
     }
 
     @media(max-width:480px) {
-      .ad-sidebar {
-        right: 4px;
-        top: auto;
-        bottom: 10px;
-        transform: none;
-        width: 90px;
-        gap: 6px
+      .ad-banner-inner {
+        border-radius: 10px;
+        margin: 0 6px;
       }
 
-      .ad-card {
-        padding: 5px 4px;
-        border-radius: 8px
+      .ad-banner-card {
+        padding: 8px 10px;
+        gap: 10px;
       }
 
-      .ad-card .ad-img {
-        width: 76px;
-        height: 56px;
-        border-radius: 5px
+      .ad-banner-card .ab-img {
+        width: 56px;
+        height: 42px;
+        border-radius: 6px;
       }
 
-      .ad-card .ad-name {
-        font-size: 10px
+      .ad-banner-card .ab-name {
+        font-size: 13px;
       }
 
-      .ad-card .ad-src {
-        font-size: 8px
+      .ad-banner-card .ab-cta {
+        padding: 4px 10px;
+        font-size: 11px;
+      }
+
+      .ad-reopen-tab {
+        bottom: 8px;
+        right: 8px;
+        padding: 6px 10px;
+        font-size: 11px;
       }
     }
 
@@ -786,18 +908,87 @@
       { name: "滿貫大亨", img: "advertise/advertise2.jpeg", src: "gametower", url: "https://www.gametower.com.tw/Games/TMD/?utm_source=kentarry&utm_medium=banner2&utm_campaign=0313promotion" },
       { name: "多功能工具箱", img: "advertise/advertise3.jpeg", src: "kentarry", url: "https://kentarry.github.io/100-tools-box/" },
       { name: "台灣AI新聞", img: "advertise/advertise4.jpg", src: "twainews", url: "https://www.twainews.com.tw/3325835069235672403720855" },];
-    function renderAdSidebar() {
-      var existing = document.getElementById('ad-sidebar');
-      if (existing) return; // already rendered
-      var sidebar = h('div', { class: 'ad-sidebar', id: 'ad-sidebar' });
+    function renderAdBanner() {
+      if (document.getElementById('ad-banner-wrap')) return;
+      var adIdx = 0;
+      var adTimer = null;
+
+      // Main banner wrapper
+      var wrap = h('div', { class: 'ad-banner-wrap', id: 'ad-banner-wrap' });
+      var inner = h('div', { class: 'ad-banner-inner' });
+
+      // Close button
+      var closeBtn = h('button', { class: 'ad-banner-close', title: '關閉廣告' });
+      closeBtn.textContent = '✕';
+      inner.appendChild(closeBtn);
+
+      // Track (slides)
+      var track = h('div', { class: 'ad-banner-track', id: 'ad-banner-track' });
       ADS.forEach(function (ad) {
-        var card = h('a', { class: 'ad-card', href: ad.url, target: '_blank', rel: 'noopener' });
-        card.innerHTML = '<div class="ad-src">' + ad.src + '</div>' +
-          '<img class="ad-img" src="' + ad.img + '" alt="' + ad.name + '">' +
-          '<div class="ad-name">' + ad.name + '</div>';
-        sidebar.appendChild(card);
+        var card = h('a', { class: 'ad-banner-card', href: ad.url, target: '_blank', rel: 'noopener' });
+        card.innerHTML =
+          '<img class="ab-img" src="' + ad.img + '" alt="' + ad.name + '">' +
+          '<div class="ab-info">' +
+            '<div class="ab-name">' + ad.name + '</div>' +
+            '<div class="ab-src">由 ' + ad.src + ' 贊助</div>' +
+            '<span class="ab-cta">前往查看 →</span>' +
+          '</div>';
+        track.appendChild(card);
       });
-      document.body.appendChild(sidebar);
+      inner.appendChild(track);
+
+      // Dots
+      var dotsWrap = h('div', { class: 'ad-banner-dots', id: 'ad-banner-dots' });
+      ADS.forEach(function (_, i) {
+        var dot = h('button', { class: 'dot' + (i === 0 ? ' active' : '') });
+        dot.addEventListener('click', function (e) { e.stopPropagation(); goToAd(i); });
+        dotsWrap.appendChild(dot);
+      });
+      inner.appendChild(dotsWrap);
+
+      wrap.appendChild(inner);
+      document.body.appendChild(wrap);
+
+      // Reopen tab
+      var reopenTab = h('button', { class: 'ad-reopen-tab', id: 'ad-reopen-tab' });
+      reopenTab.textContent = '📢 廣告';
+      document.body.appendChild(reopenTab);
+
+      function goToAd(idx) {
+        adIdx = idx;
+        track.style.transform = 'translateX(-' + (adIdx * 100) + '%)';
+        var dots = dotsWrap.querySelectorAll('.dot');
+        dots.forEach(function (d, j) {
+          d.classList.toggle('active', j === adIdx);
+        });
+        resetTimer();
+      }
+
+      function nextAd() {
+        goToAd((adIdx + 1) % ADS.length);
+      }
+
+      function resetTimer() {
+        if (adTimer) clearInterval(adTimer);
+        adTimer = setInterval(nextAd, 5000);
+      }
+
+      // Close / Reopen
+      closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        wrap.classList.add('hidden');
+        reopenTab.classList.add('show');
+        if (adTimer) { clearInterval(adTimer); adTimer = null; }
+      });
+
+      reopenTab.addEventListener('click', function () {
+        wrap.classList.remove('hidden');
+        reopenTab.classList.remove('show');
+        resetTimer();
+      });
+
+      // Start auto-rotate
+      resetTimer();
     }
     const FOOD_EMOJI = {
       "蘋果": "🍎", "橘子": "🍊", "香蕉": "🍌", "鳳梨": "🍍", "葡萄": "🍇", "西瓜": "🍉", "芒果": "🥭", "柚子": "🍈", "水梨": "🍐", "荔枝": "🍒", "龍眼": "🫐", "火龍果": "🐉", "蓮霧": "🍑", "柿子": "🟠", "楊桃": "⭐", "棗子": "🫒", "芭樂": "🍏", "木瓜": "🍈",
@@ -1465,7 +1656,7 @@
 
     // ═══════════ INIT ═══════════
     render();
-    renderAdSidebar();
+    renderAdBanner();
   </script>
 </body>
 
